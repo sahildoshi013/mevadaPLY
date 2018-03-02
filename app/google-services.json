@@ -1,0 +1,55 @@
+{
+  "project_info": {
+    "project_number": "741947128886",
+    "firebase_url": "https://mevadaply.firebaseio.com",
+    "project_id": "mevadaply",
+    "storage_bucket": "mevadaply.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:741947128886:android:e03c45515a5c5221",
+        "android_client_info": {
+          "package_name": "com.example.sahilj.mevadaply"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "741947128886-1utnf5ao21a9jjvqqj051v67mufaqj5n.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.sahilj.mevadaply",
+            "certificate_hash": "f88f8a8d648f5cdd26f1e9d88221c31befea2c01"
+          }
+        },
+        {
+          "client_id": "741947128886-bf5ju0fdphu9hvma27bfds787p4t3kee.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCi1DL1gKZyF4Q1ugBshPvW2MPDl3iSvXg"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 2,
+          "other_platform_oauth_client": [
+            {
+              "client_id": "741947128886-bf5ju0fdphu9hvma27bfds787p4t3kee.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
