@@ -32,11 +32,18 @@ public class MyUtilities {
     private static final String TAG = "MyUtilitiies";
     private static String phoneNumber;
 
+    private static Integer sum=0;
+
+
+    public static Integer getSum() {
+        return sum;
+    }
+
     public static int getPointCount(List<TransDetails> transDetails){
 
         if(transDetails==null)
             return 0;
-        int sum=0;
+        sum=0;
 
         for (TransDetails trans :
                 transDetails) {
@@ -47,6 +54,7 @@ public class MyUtilities {
                 sum-=Integer.valueOf(trans.getTrans_amount());
 
         }
+
         return sum;
     }
 

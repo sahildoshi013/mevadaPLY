@@ -13,7 +13,8 @@ import android.widget.Toast;
 import com.bumptech.glide.Glide;
 import com.example.sahilj.mevadaply.R;
 import com.example.sahilj.mevadaply.Responses.OfferDetail;
-import com.example.sahilj.mevadaply.Responses.TransDetails;
+import com.example.sahilj.mevadaply.Utils.MyConstants;
+import com.example.sahilj.mevadaply.Utils.MyUtilities;
 import com.mikhaellopez.circularimageview.CircularImageView;
 
 import java.util.List;
@@ -43,10 +44,23 @@ public class MyRedeemOfferAdapter extends RecyclerView.Adapter<MyRedeemOfferAdap
     public void onBindViewHolder(MyViewHolder holder, int position) {
         Log.v(TAG,"Position " + position);
         final OfferDetail detail = data.get(position);
-        Glide.with(activity).load(detail.getUrl()).into(holder.imgOfferPic);
+        String url = detail.getUrl();
+        if(!url.equals(MyConstants.NULL_URL))
+            Glide.with(activity).load(detail.getUrl()).into(holder.imgOfferPic);
         holder.tvOfferName.setText(detail.getRedeem_offer_name());
         holder.tvOfferDesc.setText(detail.getRedeem_offer_description());
-        holder.tvOfferPoint.setText(detail.getRedeem_offer_points());
+        holder.tvOfferPoint.setText(String.valueOf(detail.getRedeem_offer_points()));
+
+        int point = detail.getRedeem_offer_points();
+
+        if(MyUtilities.getSum()-point<0) {
+            String pointNeed = point-MyUtilities.getSum() + " needed";
+            holder.tvPointNeeded.setText(pointNeed);
+            holder.btnRedeem.setEnabled(false);
+        }else{
+            holder.tvPointNeeded.setVisibility(View.GONE);
+        }
+
         holder.btnRedeem.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -68,13 +82,15 @@ public class MyRedeemOfferAdapter extends RecyclerView.Adapter<MyRedeemOfferAdap
         private final TextView tvOfferDesc;
         private final TextView tvOfferPoint;
         private final Button btnRedeem;
+        private final TextView tvPointNeeded;
 
         MyViewHolder(View itemView) {
             super(itemView);
             imgOfferPic = itemView.findViewById(R.id.imgOfferPic);
             tvOfferName = itemView.findViewById(R.id.tvOfferName);
             tvOfferDesc = itemView.findViewById(R.id.tvOfferDesc);
-            tvOfferPoint = itemView.findViewById(R.id.tvOfferPoint);
+            tvOfferPoint = itemView.findViewById(R.id.tvOfferPoints);
+            tvPointNeeded = itemView.findViewById(R.id.tvPointNeeded);
             btnRedeem = itemView.findViewById(R.id.btnRedeem);
         }
     }
