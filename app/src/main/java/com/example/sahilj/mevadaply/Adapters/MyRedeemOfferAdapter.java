@@ -1,6 +1,5 @@
-package com.example.sahilj.mevadaply;
+package com.example.sahilj.mevadaply.Adapters;
 
-import android.content.Context;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -8,6 +7,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
+import com.example.sahilj.mevadaply.R;
 import com.example.sahilj.mevadaply.Responses.TransDetails;
 
 import java.util.List;
@@ -16,18 +16,18 @@ import java.util.List;
  * Created by Sahil J on 3/1/2018.
  */
 
-public class MyHistoryAdapter extends RecyclerView.Adapter<MyHistoryAdapter.MyViewHolder> {
+public class MyRedeemOfferAdapter extends RecyclerView.Adapter<MyRedeemOfferAdapter.MyViewHolder> {
 
-    private static final String TAG = "History Adapter";
+    private static final String TAG = "Redeem Offer Adapter";
     private final List<TransDetails> data;
 
-    public MyHistoryAdapter(List<TransDetails> data) {
+    public MyRedeemOfferAdapter(List<TransDetails> data) {
         this.data=data;
     }
 
     @Override
     public MyViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        View view= LayoutInflater.from(parent.getContext()).inflate(R.layout.content_history,parent,false);
+        View view= LayoutInflater.from(parent.getContext()).inflate(R.layout.content_redeem_offer,parent,false);
         return new MyViewHolder(view);
     }
 

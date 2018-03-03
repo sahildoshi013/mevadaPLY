@@ -1,6 +1,7 @@
 package com.example.sahilj.mevadaply.APIs;
 
 
+import com.example.sahilj.mevadaply.Responses.RedeemOfferResult;
 import com.example.sahilj.mevadaply.Responses.Result;
 import com.example.sahilj.mevadaply.Responses.TransResult;
 import com.example.sahilj.mevadaply.Responses.UpdateResult;
@@ -44,6 +45,10 @@ public interface ApiInterface {
                                       @Part("number") RequestBody number,
                                       @Part("area") RequestBody area,
                                       @Part("city") RequestBody city);
+
+    @FormUrlEncoded
+    @POST("redeemOffers.php")
+    Call<RedeemOfferResult> getRedeemOffers();
 
     /*@FormUrlEncoded
     @POST("login.php")

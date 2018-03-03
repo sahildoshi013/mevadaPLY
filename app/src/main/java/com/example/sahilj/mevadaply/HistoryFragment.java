@@ -11,6 +11,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.example.sahilj.mevadaply.Adapters.MyHistoryAdapter;
 import com.example.sahilj.mevadaply.Responses.TransDetails;
 import com.example.sahilj.mevadaply.Responses.TransResult;
 import com.example.sahilj.mevadaply.Utils.MyUtilities;
