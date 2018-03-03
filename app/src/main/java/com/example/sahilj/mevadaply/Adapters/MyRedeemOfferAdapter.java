@@ -1,14 +1,20 @@
 package com.example.sahilj.mevadaply.Adapters;
 
+import android.app.Activity;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.TextView;
+import android.widget.Toast;
 
+import com.bumptech.glide.Glide;
 import com.example.sahilj.mevadaply.R;
+import com.example.sahilj.mevadaply.Responses.OfferDetail;
 import com.example.sahilj.mevadaply.Responses.TransDetails;
+import com.mikhaellopez.circularimageview.CircularImageView;
 
 import java.util.List;
 
@@ -19,10 +25,12 @@ import java.util.List;
 public class MyRedeemOfferAdapter extends RecyclerView.Adapter<MyRedeemOfferAdapter.MyViewHolder> {
 
     private static final String TAG = "Redeem Offer Adapter";
-    private final List<TransDetails> data;
+    private final List<OfferDetail> data;
+    private final Activity activity;
 
-    public MyRedeemOfferAdapter(List<TransDetails> data) {
+    public MyRedeemOfferAdapter(List<OfferDetail> data, Activity activity) {
         this.data=data;
+        this.activity=activity;
     }
 
     @Override
@@ -34,11 +42,18 @@ public class MyRedeemOfferAdapter extends RecyclerView.Adapter<MyRedeemOfferAdap
     @Override
     public void onBindViewHolder(MyViewHolder holder, int position) {
         Log.v(TAG,"Position " + position);
-        TransDetails detail = data.get(position);
-        holder.tvDate.setText(detail.getTrans_time());
-        holder.tvDesc.setText(detail.getTrans_comment());
-        holder.tvType.setText(detail.getTrans_type());
-        holder.tvPoints.setText(detail.getTrans_amount());
+        final OfferDetail detail = data.get(position);
+        Glide.with(activity).load(detail.getUrl()).into(holder.imgOfferPic);
+        holder.tvOfferName.setText(detail.getRedeem_offer_name());
+        holder.tvOfferDesc.setText(detail.getRedeem_offer_description());
+        holder.tvOfferPoint.setText(detail.getRedeem_offer_points());
+        holder.btnRedeem.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Toast.makeText(activity, "offer "+detail.getRedeem_offer_name(), Toast.LENGTH_SHORT).show();
+            }
+        });
+
     }
 
     @Override
@@ -48,18 +63,19 @@ public class MyRedeemOfferAdapter extends RecyclerView.Adapter<MyRedeemOfferAdap
 
     class MyViewHolder extends RecyclerView.ViewHolder {
 
-        private TextView tvDate;
-        private TextView tvDesc;
-        private TextView tvType;
-        private TextView tvPoints;
+        private final CircularImageView imgOfferPic;
+        private final TextView tvOfferName;
+        private final TextView tvOfferDesc;
+        private final TextView tvOfferPoint;
+        private final Button btnRedeem;
 
         MyViewHolder(View itemView) {
             super(itemView);
-            tvDate = itemView.findViewById(R.id.tvDate);
-            tvDesc = itemView.findViewById(R.id.tvDesc);
-            tvType = itemView.findViewById(R.id.tvType);
-            tvPoints = itemView.findViewById(R.id.tvPoints);
-
+            imgOfferPic = itemView.findViewById(R.id.imgOfferPic);
+            tvOfferName = itemView.findViewById(R.id.tvOfferName);
+            tvOfferDesc = itemView.findViewById(R.id.tvOfferDesc);
+            tvOfferPoint = itemView.findViewById(R.id.tvOfferPoint);
+            btnRedeem = itemView.findViewById(R.id.btnRedeem);
         }
     }
 }

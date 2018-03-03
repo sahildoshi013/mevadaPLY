@@ -1,5 +1,6 @@
 package com.example.sahilj.mevadaply.Responses;
 
+import com.example.sahilj.mevadaply.APIs.ApiClient;
 import com.google.gson.annotations.SerializedName;
 
 /**
@@ -20,6 +21,9 @@ public class OfferDetail {
     @SerializedName("redeem_offer_description")
     private String redeem_offer_description;
 
+    @SerializedName("url")
+    private String url;
+
     public int getRedeem_offer_id() {
         return redeem_offer_id;
     }
@@ -36,4 +40,7 @@ public class OfferDetail {
         return redeem_offer_description;
     }
 
+    public String getUrl() {
+        return ApiClient.getBaseUrl()+url;
+    }
 }

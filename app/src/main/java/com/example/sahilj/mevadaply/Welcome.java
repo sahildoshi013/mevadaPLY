@@ -21,6 +21,7 @@ import android.widget.Toast;
 import com.bumptech.glide.Glide;
 import com.example.sahilj.mevadaply.Responses.Result;
 import com.example.sahilj.mevadaply.Responses.TransResult;
+import com.example.sahilj.mevadaply.Utils.MyConstants;
 import com.example.sahilj.mevadaply.Utils.MyUtilities;
 import com.google.firebase.auth.FirebaseAuth;
 import com.mikhaellopez.circularimageview.CircularImageView;
@@ -42,7 +43,7 @@ public class Welcome extends AppCompatActivity
     private NavigationView navigationView;
     private TextView drawerNumber;
     private TextView drawerName;
-    private CircularImageView drawerProfilepic;
+    private CircularImageView drawerProfilePic;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -57,7 +58,7 @@ public class Welcome extends AppCompatActivity
             Toast.makeText(this, "Welcome New User", Toast.LENGTH_SHORT).show();
             Intent openProfile = new Intent(getBaseContext(),ContainerActivity.class);
             openProfile.putExtra("time",1);
-            openProfile.putExtra("type","profile");
+            openProfile.putExtra(MyConstants.TYPE, MyConstants.TYPE_PROFILE);
             startActivity(openProfile);
         }
 
@@ -90,7 +91,7 @@ public class Welcome extends AppCompatActivity
         userPoints = findViewById(R.id.tvPoints);
         userAddress = findViewById(R.id.tvArea);
         View view=navigationView.getHeaderView(0);
-        drawerProfilepic = view.findViewById(R.id.imgDrawerProfilePic);
+        drawerProfilePic = view.findViewById(R.id.imgDrawerProfilePic);
         drawerName = view.findViewById(R.id.tvDrawerUserName);
         drawerNumber = view.findViewById(R.id.tvDrawerUserNumber);
     }
@@ -136,13 +137,13 @@ public class Welcome extends AppCompatActivity
         if (id == R.id.nav_profile) {
             Intent intent = new Intent(getBaseContext(),ContainerActivity.class);
             intent.putExtra("time",0);
-            intent.putExtra("type","profile");
+            intent.putExtra(MyConstants.TYPE,MyConstants.TYPE_PROFILE);
             startActivity(intent);
             // Handle the camera action
         } else if (id == R.id.nav_history) {
             Intent intent = new Intent(getBaseContext(),ContainerActivity.class);
             intent.putExtra("time",0);
-            intent.putExtra("type","history");
+            intent.putExtra(MyConstants.TYPE,MyConstants.TYPE_HISTORY);
             startActivity(intent);
         } else if (id == R.id.nav_changeNumber) {
 
@@ -163,6 +164,10 @@ public class Welcome extends AppCompatActivity
     }
 
     public void showRedeemOffers(View view) {
+        Intent intent = new Intent(getBaseContext(),ContainerActivity.class);
+        intent.putExtra("time",0);
+        intent.putExtra(MyConstants.TYPE,MyConstants.TYPE_REDEEM);
+        startActivity(intent);
     }
 
     public void showDesignTrends(View view) {
@@ -186,7 +191,7 @@ public class Welcome extends AppCompatActivity
                     String name = response.body().getDetails().getUser_fname() + " " + response.body().getDetails().getUser_lname();
                     String area = response.body().getDetails().get_area();
 
-                    Glide.with(getApplicationContext()).load(response.body().getDetails().getUser_pic_url()).into(drawerProfilepic);
+                    Glide.with(getApplicationContext()).load(response.body().getDetails().getUser_pic_url()).into(drawerProfilePic);
                     Glide.with(getApplicationContext()).load(response.body().getDetails().getUser_pic_url()).into(profilePic);
                     drawerName.setText(name);
                     drawerNumber.setText(response.body().getDetails().getUser_phone());

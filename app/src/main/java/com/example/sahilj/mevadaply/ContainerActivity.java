@@ -4,6 +4,9 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.widget.FrameLayout;
 
+import com.example.sahilj.mevadaply.Utils.MyConstants;
+import com.example.sahilj.mevadaply.Utils.MyUtilities;
+
 public class ContainerActivity extends AppCompatActivity {
 
     private FrameLayout frmContainer;
@@ -18,10 +21,12 @@ public class ContainerActivity extends AppCompatActivity {
         Bundle bundle = getIntent().getExtras();
 
         if(bundle!=null){
-            if(bundle.get("type").equals("profile"))
+            if(bundle.get(MyConstants.TYPE).equals(MyConstants.TYPE_PROFILE))
                 getSupportFragmentManager().beginTransaction().replace(frmContainer.getId(),new UserProfileFragment(this,bundle)).commit();
-            if(bundle.get("type").equals("history"))
+            if(bundle.get(MyConstants.TYPE).equals(MyConstants.TYPE_HISTORY))
                 getSupportFragmentManager().beginTransaction().replace(frmContainer.getId(),new HistoryFragment(this)).commit();
+            if(bundle.get(MyConstants.TYPE).equals(MyConstants.TYPE_REDEEM))
+                getSupportFragmentManager().beginTransaction().replace(frmContainer.getId(),new RedeemOfferFragment(this)).commit();
         }
     }
 }

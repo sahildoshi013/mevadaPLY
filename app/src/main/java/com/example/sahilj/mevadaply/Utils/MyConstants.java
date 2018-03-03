@@ -10,5 +10,9 @@ import com.example.sahilj.mevadaply.APIs.ApiInterface;
 public class MyConstants {
 
     public static final String DB_USER = "user";
+    public static final String TYPE_REDEEM = "redeem";
+    public static final String TYPE = "type";
+    public static final String TYPE_PROFILE = "profile";
+    public static final String TYPE_HISTORY = "history";
     public static ApiInterface apiInterface= ApiClient.getClient().create(ApiInterface.class);
 }

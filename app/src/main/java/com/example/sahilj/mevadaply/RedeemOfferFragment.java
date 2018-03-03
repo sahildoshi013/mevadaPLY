@@ -6,13 +6,19 @@ import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.example.sahilj.mevadaply.Adapters.MyHistoryAdapter;
+import com.example.sahilj.mevadaply.Adapters.MyRedeemOfferAdapter;
+import com.example.sahilj.mevadaply.Responses.OfferDetail;
 import com.example.sahilj.mevadaply.Responses.RedeemOfferResult;
 import com.example.sahilj.mevadaply.Responses.TransResult;
 import com.example.sahilj.mevadaply.Utils.MyUtilities;
+
+import java.util.List;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -27,6 +33,7 @@ import static com.example.sahilj.mevadaply.Utils.MyConstants.apiInterface;
 public class RedeemOfferFragment extends Fragment {
 
 
+    private static final String TAG = "Redeem Fragment";
     private RecyclerView rvRedeemOffer;
     private Activity activity;
 
@@ -56,13 +63,15 @@ public class RedeemOfferFragment extends Fragment {
             @Override
             public void onResponse(Call<RedeemOfferResult> call, Response<RedeemOfferResult> response) {
                 if(response.body().isStatus()){
-
+                    List<OfferDetail> data = response.body().getData();
+                    MyRedeemOfferAdapter adapter = new MyRedeemOfferAdapter(data, getActivity());
+                    rvRedeemOffer.setAdapter(adapter);
                 }
             }
 
             @Override
             public void onFailure(Call<RedeemOfferResult> call, Throwable t) {
-
+                Log.v(TAG,"Fail To Load Data",t);
             }
         });
     }
