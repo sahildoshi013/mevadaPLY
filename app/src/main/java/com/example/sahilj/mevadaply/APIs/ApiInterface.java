@@ -46,7 +46,6 @@ public interface ApiInterface {
                                       @Part("area") RequestBody area,
                                       @Part("city") RequestBody city);
 
-    @FormUrlEncoded
     @POST("redeemOffers.php")
     Call<RedeemOfferResult> getRedeemOffers();
 
