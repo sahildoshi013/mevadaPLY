@@ -171,6 +171,10 @@ public class Welcome extends AppCompatActivity
     }
 
     public void showDesignTrends(View view) {
+        Intent intent = new Intent(getBaseContext(),ContainerActivity.class);
+        intent.putExtra("time",0);
+        intent.putExtra(MyConstants.TYPE,MyConstants.TYPE_DESIGN);
+        startActivity(intent);
     }
 
     @Override

@@ -1,17 +1,21 @@
 package com.example.sahilj.mevadaply.Adapters;
 
 import android.app.Activity;
+import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 import com.example.sahilj.mevadaply.R;
+import com.example.sahilj.mevadaply.Responses.DesignDetail;
+import com.example.sahilj.mevadaply.Responses.DesignTrendsResult;
 import com.example.sahilj.mevadaply.Responses.OfferDetail;
 import com.example.sahilj.mevadaply.Utils.MyConstants;
 import com.example.sahilj.mevadaply.Utils.MyUtilities;
@@ -26,45 +30,33 @@ import java.util.List;
 public class MyDesignTrendsAdapter extends RecyclerView.Adapter<MyDesignTrendsAdapter.MyViewHolder> {
 
     private static final String TAG = "Redeem Offer Adapter";
-    private final List<OfferDetail> data;
+    private final List<DesignDetail> data;
     private final Activity activity;
 
-    public MyDesignTrendsAdapter(List<OfferDetail> data, Activity activity) {
+    public MyDesignTrendsAdapter(List<DesignDetail> data, Activity activity) {
         this.data=data;
         this.activity=activity;
     }
 
     @Override
     public MyViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        View view= LayoutInflater.from(parent.getContext()).inflate(R.layout.content_redeem_offer,parent,false);
+        View view= LayoutInflater.from(parent.getContext()).inflate(R.layout.content_design_trends,parent,false);
         return new MyViewHolder(view);
     }
 
     @Override
     public void onBindViewHolder(MyViewHolder holder, int position) {
         Log.v(TAG,"Position " + position);
-        final OfferDetail detail = data.get(position);
+        final DesignDetail detail = data.get(position);
         String url = detail.getUrl();
         if(!url.equals(MyConstants.NULL_URL))
-            Glide.with(activity).load(detail.getUrl()).into(holder.imgOfferPic);
-        holder.tvOfferName.setText(detail.getRedeem_offer_name());
-        holder.tvOfferDesc.setText(detail.getRedeem_offer_description());
-        holder.tvOfferPoint.setText(String.valueOf(detail.getRedeem_offer_points()));
+            Glide.with(activity).load(detail.getUrl()).into(holder.imgDesignImage);
+        holder.tvDesignName.setText(detail.getDesign_name());
 
-        int point = detail.getRedeem_offer_points();
-
-        if(MyUtilities.getSum()-point<0) {
-            String pointNeed = point-MyUtilities.getSum() + " needed";
-            holder.tvPointNeeded.setText(pointNeed);
-            holder.btnRedeem.setEnabled(false);
-        }else{
-            holder.tvPointNeeded.setVisibility(View.GONE);
-        }
-
-        holder.btnRedeem.setOnClickListener(new View.OnClickListener() {
+        holder.cvDesignContain.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Toast.makeText(activity, "offer "+detail.getRedeem_offer_name(), Toast.LENGTH_SHORT).show();
+                Toast.makeText(activity, "Design "+detail.getDesign_name(), Toast.LENGTH_SHORT).show();
             }
         });
 
@@ -77,21 +69,16 @@ public class MyDesignTrendsAdapter extends RecyclerView.Adapter<MyDesignTrendsAd
 
     class MyViewHolder extends RecyclerView.ViewHolder {
 
-        private final CircularImageView imgOfferPic;
-        private final TextView tvOfferName;
-        private final TextView tvOfferDesc;
-        private final TextView tvOfferPoint;
-        private final Button btnRedeem;
-        private final TextView tvPointNeeded;
+
+        private final TextView tvDesignName;
+        private final CardView cvDesignContain;
+        private final ImageView imgDesignImage;
 
         MyViewHolder(View itemView) {
             super(itemView);
-            imgOfferPic = itemView.findViewById(R.id.imgOfferPic);
-            tvOfferName = itemView.findViewById(R.id.tvOfferName);
-            tvOfferDesc = itemView.findViewById(R.id.tvOfferDesc);
-            tvOfferPoint = itemView.findViewById(R.id.tvOfferPoints);
-            tvPointNeeded = itemView.findViewById(R.id.tvPointNeeded);
-            btnRedeem = itemView.findViewById(R.id.btnRedeem);
+            cvDesignContain = itemView.findViewById(R.id.cvDesignContain);
+            tvDesignName = itemView.findViewById(R.id.tvDesignName);
+            imgDesignImage = itemView.findViewById(R.id.imgDesignImage);
         }
     }
 }

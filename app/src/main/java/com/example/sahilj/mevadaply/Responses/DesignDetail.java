@@ -7,7 +7,7 @@ import com.google.gson.annotations.SerializedName;
  * Created by Sahil J on 3/5/2018.
  */
 
-class DesignDetail {
+public class DesignDetail {
 
     @SerializedName("design_id")
     private int design_id;

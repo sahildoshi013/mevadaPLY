@@ -51,7 +51,7 @@ public interface ApiInterface {
     Call<RedeemOfferResult> getRedeemOffers();
 
     @POST("designTrends.php")
-    Call<DesignTrendsResult> getRedeemOffers();
+    Call<DesignTrendsResult> getDesignTrends();
 
     /*@FormUrlEncoded
     @POST("login.php")

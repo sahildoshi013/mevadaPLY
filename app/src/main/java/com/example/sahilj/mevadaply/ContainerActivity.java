@@ -27,6 +27,8 @@ public class ContainerActivity extends AppCompatActivity {
                 getSupportFragmentManager().beginTransaction().replace(frmContainer.getId(),new HistoryFragment(this)).commit();
             if(bundle.get(MyConstants.TYPE).equals(MyConstants.TYPE_REDEEM))
                 getSupportFragmentManager().beginTransaction().replace(frmContainer.getId(),new RedeemOfferFragment(this)).commit();
+            if(bundle.get(MyConstants.TYPE).equals(MyConstants.TYPE_DESIGN))
+                getSupportFragmentManager().beginTransaction().replace(frmContainer.getId(),new DesignTrendsFragment(this)).commit();
         }
     }
 }

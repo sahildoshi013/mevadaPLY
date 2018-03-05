@@ -15,5 +15,6 @@ public class MyConstants {
     public static final String TYPE_PROFILE = "profile";
     public static final String TYPE_HISTORY = "history";
     public static final String NULL_URL = "http://www.swoopzi.com/mevada/null";
+    public static final String TYPE_DESIGN = "design";
     public static ApiInterface apiInterface= ApiClient.getClient().create(ApiInterface.class);
 }
