@@ -4,7 +4,14 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context="com.example.sahilj.mevadaply.SplashScreen"
-    android:background="@drawable/ic_launcher_background">
+    android:background="@color/colorPrimary">
 
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:gravity="center"
+        android:text="Mevada PLY"
+        android:textColor="@android:color/white"
+        android:textSize="50sp" />
 
 </LinearLayout>

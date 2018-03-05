@@ -11,9 +11,12 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.example.sahilj.mevadaply.Adapters.MyDesignTrendsAdapter;
 import com.example.sahilj.mevadaply.Adapters.MyRedeemOfferAdapter;
+import com.example.sahilj.mevadaply.Responses.DesignDetail;
+import com.example.sahilj.mevadaply.Responses.DesignTrendsResult;
 import com.example.sahilj.mevadaply.Responses.OfferDetail;
-import com.example.sahilj.mevadaply.Responses.RedeemOfferResult;
+import com.example.sahilj.mevadaply.Responses.DesignTrendsResult;
 
 import java.util.List;
 
@@ -57,19 +60,19 @@ public class DesignTrendsFragment extends Fragment {
     }
 
     private void getDesignTrends() {
-        Call<RedeemOfferResult> call=apiInterface.getRedeemOffers();
-        call.enqueue(new Callback<RedeemOfferResult>() {
+        Call<DesignTrendsResult> call=apiInterface.getDesignTrends();
+        call.enqueue(new Callback<DesignTrendsResult>() {
             @Override
-            public void onResponse(Call<RedeemOfferResult> call, Response<RedeemOfferResult> response) {
+            public void onResponse(Call<DesignTrendsResult> call, Response<DesignTrendsResult> response) {
                 if(response.body().isStatus()){
-                    List<OfferDetail> data = response.body().getData();
-                    MyRedeemOfferAdapter adapter = new MyRedeemOfferAdapter(data, getActivity());
+                    List<DesignDetail> data = response.body().getData();
+                    MyDesignTrendsAdapter adapter = new MyDesignTrendsAdapter(data, getActivity());
                     rvDesignTrends.setAdapter(adapter);
                 }
             }
 
             @Override
-            public void onFailure(Call<RedeemOfferResult> call, Throwable t) {
+            public void onFailure(Call<DesignTrendsResult> call, Throwable t) {
                 Log.v(TAG,"Fail To Load Data",t);
             }
         });
