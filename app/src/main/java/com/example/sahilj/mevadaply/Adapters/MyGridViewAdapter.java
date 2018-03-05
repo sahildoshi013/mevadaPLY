@@ -2,6 +2,8 @@ package com.example.sahilj.mevadaply.Adapters;
 
 import android.app.Activity;
 import android.content.Context;
+import android.os.Bundle;
+import android.support.v4.app.FragmentManager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -9,9 +11,12 @@ import android.widget.ArrayAdapter;
 import android.widget.ImageView;
 
 import com.bumptech.glide.Glide;
+import com.example.sahilj.mevadaply.DisplayImageFragment;
 import com.example.sahilj.mevadaply.R;
 import com.example.sahilj.mevadaply.Responses.DesignDetails;
+import com.example.sahilj.mevadaply.Utils.MyConstants;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -21,15 +26,17 @@ import java.util.List;
 
 public class MyGridViewAdapter extends ArrayAdapter<DesignDetails> {
 
-        private Context mContext;
+    private final FragmentManager fragmentManager;
+    private Context mContext;
         private int layoutResourceId;
         private List<DesignDetails> mGridData;
 
-        public MyGridViewAdapter(Context mContext, int layoutResourceId, List<DesignDetails> mGridData) {
+        public MyGridViewAdapter(Context mContext, int layoutResourceId, List<DesignDetails> mGridData, FragmentManager fragmentManager) {
             super(mContext, layoutResourceId, mGridData);
             this.layoutResourceId = layoutResourceId;
             this.mContext = mContext;   
             this.mGridData = mGridData;
+            this.fragmentManager=fragmentManager;
         }
 
         /**
@@ -42,7 +49,7 @@ public class MyGridViewAdapter extends ArrayAdapter<DesignDetails> {
         }
 
         @Override
-        public View getView(int position, View convertView, ViewGroup parent) {
+        public View getView(final int position, View convertView, ViewGroup parent) {
             View row = convertView;
             ViewHolder holder;
             if (row == null) {
@@ -54,9 +61,20 @@ public class MyGridViewAdapter extends ArrayAdapter<DesignDetails> {
             } else {
                 holder = (ViewHolder) row.getTag();
             }
-            DesignDetails item = mGridData.get(position);
+            final DesignDetails item = mGridData.get(position);
 
             Glide.with(mContext).load(item.getPhoto_url()).into(holder.imageView);
+            holder.imageView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    DisplayImageFragment displayImageFragment = new DisplayImageFragment();
+                    Bundle bundle=new Bundle();
+                    bundle.putInt(MyConstants.CURRENT_SELECTED_ID,position);
+                    bundle.putSerializable(MyConstants.DATA, (Serializable) mGridData);
+                    displayImageFragment.setArguments(bundle);
+                    fragmentManager.beginTransaction().add(R.id.frmContainer,displayImageFragment).addToBackStack(null).commit();
+                }
+            });
             return row;
         }
 

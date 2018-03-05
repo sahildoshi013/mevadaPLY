@@ -77,7 +77,7 @@ public class DisplayDesignFragment extends Fragment {
                 if(response.body().isStatus()){
                     Log.v(TAG,"Done ");
                     mGridData=response.body().getData();
-                    mGridAdapter = new MyGridViewAdapter(getContext(), R.layout.content_grid_layout, mGridData);
+                    mGridAdapter = new MyGridViewAdapter(getContext(), R.layout.content_grid_layout, mGridData,getFragmentManager());
                     mGridView.setAdapter(mGridAdapter);
                 }
                 mProgressBar.setVisibility(View.GONE);
