@@ -12,10 +12,7 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.example.sahilj.mevadaply.Adapters.MyDesignTrendsAdapter;
-import com.example.sahilj.mevadaply.Adapters.MyRedeemOfferAdapter;
-import com.example.sahilj.mevadaply.Responses.DesignDetail;
-import com.example.sahilj.mevadaply.Responses.DesignTrendsResult;
-import com.example.sahilj.mevadaply.Responses.OfferDetail;
+import com.example.sahilj.mevadaply.Responses.DesignTrendsDetail;
 import com.example.sahilj.mevadaply.Responses.DesignTrendsResult;
 
 import java.util.List;
@@ -65,8 +62,8 @@ public class DesignTrendsFragment extends Fragment {
             @Override
             public void onResponse(Call<DesignTrendsResult> call, Response<DesignTrendsResult> response) {
                 if(response.body().isStatus()){
-                    List<DesignDetail> data = response.body().getData();
-                    MyDesignTrendsAdapter adapter = new MyDesignTrendsAdapter(data, getActivity());
+                    List<DesignTrendsDetail> data = response.body().getData();
+                    MyDesignTrendsAdapter adapter = new MyDesignTrendsAdapter(data, getActivity(),getFragmentManager());
                     rvDesignTrends.setAdapter(adapter);
                 }
             }

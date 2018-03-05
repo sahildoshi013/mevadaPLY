@@ -83,6 +83,8 @@ public class Welcome extends AppCompatActivity
         initialisingVariable();
         getUserData();
         getTransactionData();
+
+
     }
 
     private void initialisingVariable() {
@@ -181,6 +183,7 @@ public class Welcome extends AppCompatActivity
     protected void onResume() {
         super.onResume();
         getUserData();
+        getTransactionData();
     }
 
     //Get User Data

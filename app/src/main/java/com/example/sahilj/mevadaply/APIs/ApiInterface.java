@@ -1,6 +1,7 @@
 package com.example.sahilj.mevadaply.APIs;
 
 
+import com.example.sahilj.mevadaply.Responses.DesignDetailResult;
 import com.example.sahilj.mevadaply.Responses.DesignTrendsResult;
 import com.example.sahilj.mevadaply.Responses.RedeemOfferResult;
 import com.example.sahilj.mevadaply.Responses.Result;
@@ -52,6 +53,10 @@ public interface ApiInterface {
 
     @POST("designTrends.php")
     Call<DesignTrendsResult> getDesignTrends();
+
+    @FormUrlEncoded
+    @POST("designDetails.php")
+    Call<DesignDetailResult> getDesignDetails(@Field("design_id") int design_id);
 
     /*@FormUrlEncoded
     @POST("login.php")

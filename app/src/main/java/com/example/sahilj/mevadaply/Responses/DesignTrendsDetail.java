@@ -3,11 +3,13 @@ package com.example.sahilj.mevadaply.Responses;
 import com.example.sahilj.mevadaply.APIs.ApiClient;
 import com.google.gson.annotations.SerializedName;
 
+import java.io.Serializable;
+
 /**
  * Created by Sahil J on 3/5/2018.
  */
 
-public class DesignDetail {
+public class DesignTrendsDetail implements Serializable {
 
     @SerializedName("design_id")
     private int design_id;

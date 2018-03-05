@@ -1,6 +1,8 @@
 package com.example.sahilj.mevadaply.Adapters;
 
 import android.app.Activity;
+import android.os.Bundle;
+import android.support.v4.app.FragmentManager;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
@@ -13,13 +15,10 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
+import com.example.sahilj.mevadaply.DisplayDesignFragment;
 import com.example.sahilj.mevadaply.R;
-import com.example.sahilj.mevadaply.Responses.DesignDetail;
-import com.example.sahilj.mevadaply.Responses.DesignTrendsResult;
-import com.example.sahilj.mevadaply.Responses.OfferDetail;
+import com.example.sahilj.mevadaply.Responses.DesignTrendsDetail;
 import com.example.sahilj.mevadaply.Utils.MyConstants;
-import com.example.sahilj.mevadaply.Utils.MyUtilities;
-import com.mikhaellopez.circularimageview.CircularImageView;
 
 import java.util.List;
 
@@ -30,12 +29,14 @@ import java.util.List;
 public class MyDesignTrendsAdapter extends RecyclerView.Adapter<MyDesignTrendsAdapter.MyViewHolder> {
 
     private static final String TAG = "Redeem Offer Adapter";
-    private final List<DesignDetail> data;
+    private final List<DesignTrendsDetail> data;
     private final Activity activity;
+    private final FragmentManager fragmentManager;
 
-    public MyDesignTrendsAdapter(List<DesignDetail> data, Activity activity) {
+    public MyDesignTrendsAdapter(List<DesignTrendsDetail> data, Activity activity, FragmentManager fragmentManager) {
         this.data=data;
         this.activity=activity;
+        this.fragmentManager=fragmentManager;
     }
 
     @Override
@@ -45,9 +46,9 @@ public class MyDesignTrendsAdapter extends RecyclerView.Adapter<MyDesignTrendsAd
     }
 
     @Override
-    public void onBindViewHolder(MyViewHolder holder, int position) {
+    public void onBindViewHolder(MyViewHolder holder, final int position) {
         Log.v(TAG,"Position " + position);
-        final DesignDetail detail = data.get(position);
+        final DesignTrendsDetail detail = data.get(position);
         String url = detail.getUrl();
         if(!url.equals(MyConstants.NULL_URL))
             Glide.with(activity).load(detail.getUrl()).into(holder.imgDesignImage);
@@ -58,7 +59,11 @@ public class MyDesignTrendsAdapter extends RecyclerView.Adapter<MyDesignTrendsAd
         holder.cvDesignContain.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Toast.makeText(activity, "Design "+detail.getDesign_name(), Toast.LENGTH_SHORT).show();
+                DisplayDesignFragment displayDesignFragment = new DisplayDesignFragment();
+                Bundle bundle=new Bundle();
+                bundle.putInt(MyConstants.CURRENT_SELECTED_ID,detail.getDesign_id());
+                displayDesignFragment.setArguments(bundle);
+                fragmentManager.beginTransaction().replace(R.id.frmContainer,displayDesignFragment).addToBackStack(null).commit();
             }
         });
 

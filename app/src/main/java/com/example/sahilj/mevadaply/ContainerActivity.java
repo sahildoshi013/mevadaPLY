@@ -3,6 +3,7 @@ package com.example.sahilj.mevadaply;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.widget.FrameLayout;
+import android.widget.Toast;
 
 import com.example.sahilj.mevadaply.Utils.MyConstants;
 import com.example.sahilj.mevadaply.Utils.MyUtilities;
@@ -28,7 +29,17 @@ public class ContainerActivity extends AppCompatActivity {
             if(bundle.get(MyConstants.TYPE).equals(MyConstants.TYPE_REDEEM))
                 getSupportFragmentManager().beginTransaction().replace(frmContainer.getId(),new RedeemOfferFragment(this)).commit();
             if(bundle.get(MyConstants.TYPE).equals(MyConstants.TYPE_DESIGN))
-                getSupportFragmentManager().beginTransaction().replace(frmContainer.getId(),new DesignTrendsFragment(this)).commit();
+                getSupportFragmentManager().beginTransaction().replace(frmContainer.getId(),new DesignTrendsFragment(this)).addToBackStack(null).commit();
         }
+    }
+
+    @Override
+    public void onBackPressed() {
+
+        if(getSupportFragmentManager().getBackStackEntryCount() > 0){
+            getSupportFragmentManager().popBackStack();
+        }
+        else
+            super.onBackPressed();
     }
 }

@@ -8,19 +8,19 @@ import java.util.List;
  * Created by Sahil J on 3/5/2018.
  */
 
-public class DesignTrendsResult {
+public class DesignDetailResult {
 
     @SerializedName("status")
     private boolean status;
 
     @SerializedName("data")
-    private List<DesignTrendsDetail> data;
+    private List<DesignDetails> data;
 
     public boolean isStatus() {
         return status;
     }
 
-    public List<DesignTrendsDetail> getData() {
+    public List<DesignDetails> getData() {
         return data;
     }
 }
