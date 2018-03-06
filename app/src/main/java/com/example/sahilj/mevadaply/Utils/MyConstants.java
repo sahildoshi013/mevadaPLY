@@ -1,10 +1,16 @@
 package com.example.sahilj.mevadaply.Utils;
 
+import android.app.AlertDialog;
+import android.content.Context;
+
 import com.example.sahilj.mevadaply.APIs.ApiClient;
 import com.example.sahilj.mevadaply.APIs.ApiInterface;
+import com.example.sahilj.mevadaply.Responses.UserDetails;
 
 import java.util.Arrays;
 import java.util.List;
+
+import static com.firebase.ui.auth.AuthUI.getApplicationContext;
 
 /**
  * Created by Sahil J on 2/27/2018.
@@ -32,6 +38,12 @@ public class MyConstants {
 
     // supported file formats
     public static final List<String> FILE_EXTN = Arrays.asList("jpg", "jpeg", "png");
+    public static final String TIME = "time";
+    public static final String USER_DATA = "user_data";
+    public static final String TRANS_DATA = "transaction_data";
+    public static final String POINTS = "points";
+    public static UserDetails USER_DETAILS = null;
 
     public static ApiInterface apiInterface= ApiClient.getClient().create(ApiInterface.class);
+
 }

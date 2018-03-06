@@ -2,13 +2,14 @@ package com.example.sahilj.mevadaply.Responses;
 
 import com.google.gson.annotations.SerializedName;
 
+import java.io.Serializable;
 import java.util.Calendar;
 
 /**
  * Created by Sahil J on 2/27/2018.
  */
 
-public class TransDetails {
+public class TransDetails implements Serializable {
 
     @SerializedName("points_tranc")
     String trans_type;

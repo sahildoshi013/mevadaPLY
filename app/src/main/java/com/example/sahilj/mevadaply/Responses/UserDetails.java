@@ -17,16 +17,6 @@ import static android.content.Context.MODE_PRIVATE;
 
 public class UserDetails implements Serializable {
 
-    private static final String USER_ID = "user_id";
-    private static final String USER_FNAME = "user_fname";
-    private static final String USER_LNAME = "user_lname";
-    private static final String USER_PHONE = "user_phone";
-    private static final String USER_AREA = "user_area";
-    private static final String USER_CITY = "user_city";
-    private static final String USER_EMAIL = "user_email";
-    private static final String USER_TIME = "user_create_time";
-    private static final String USER_PIC = "user_pic_url";
-
     @SerializedName("user_id")
     private int user_id;
 
@@ -98,31 +88,35 @@ public class UserDetails implements Serializable {
         return ApiClient.getBaseUrl()+user_pic_url;
     }
 
-    public void writeData(Activity activity){
-        SharedPreferences sharedPreferences= activity.getSharedPreferences(MyConstants.DB_USER,MODE_PRIVATE);
-        SharedPreferences.Editor editor = sharedPreferences.edit();
-        editor.putInt(USER_ID,this.user_id);
-        editor.putString(USER_FNAME,this.user_fname);
-        editor.putString(USER_LNAME,this.user_lname);
-        editor.putString(USER_PHONE,this.user_phone);
-        editor.putString(USER_AREA,this.user_area);
-        editor.putString(USER_EMAIL,this.user_email);
-        editor.putString(USER_CITY,this.user_city);
-        editor.putString(USER_TIME, this.user_create_time);
-        editor.putString(USER_PIC,this.user_pic_url);
-        editor.apply();
+    public void setUser_fname(String user_fname) {
+        this.user_fname = user_fname;
     }
 
-    public void readData(Activity activity){
-        SharedPreferences sharedPreferences= activity.getSharedPreferences(MyConstants.DB_USER,MODE_PRIVATE);
-        this.user_id = sharedPreferences.getInt(USER_ID,0);
-        this.user_fname = sharedPreferences.getString(USER_FNAME,null);
-        this.user_lname = sharedPreferences.getString(USER_LNAME,null);
-        this.user_phone = sharedPreferences.getString(USER_PHONE,null);
-        this.user_area = sharedPreferences.getString(USER_AREA,null);
-        this.user_email= sharedPreferences.getString(USER_EMAIL,null);
-        this.user_city = sharedPreferences.getString(USER_CITY,null);
-        this.user_pic_url = sharedPreferences.getString(USER_PIC,null);
-        this.user_create_time = sharedPreferences.getString(USER_TIME,null);
+    public void setUser_lname(String user_lname) {
+        this.user_lname = user_lname;
+    }
+
+    public void setUser_phone(String user_phone) {
+        this.user_phone = user_phone;
+    }
+
+    public void setUser_area(String user_area) {
+        this.user_area = user_area;
+    }
+
+    public void setUser_city(String user_city) {
+        this.user_city = user_city;
+    }
+
+    public void setUser_email(String user_email) {
+        this.user_email = user_email;
+    }
+
+    public void setUser_pic_url(String user_pic_url) {
+        this.user_pic_url = user_pic_url;
+    }
+
+    public void setUser_create_time(String user_create_time) {
+        this.user_create_time = user_create_time;
     }
 }

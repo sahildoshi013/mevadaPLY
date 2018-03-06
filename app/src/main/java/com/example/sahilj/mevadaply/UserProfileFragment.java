@@ -13,7 +13,10 @@ import android.provider.MediaStore;
 import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
 import android.support.v7.app.AlertDialog;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.util.Log;
+import android.util.Patterns;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -24,6 +27,8 @@ import android.widget.Toast;
 import com.bumptech.glide.Glide;
 import com.example.sahilj.mevadaply.Responses.Result;
 import com.example.sahilj.mevadaply.Responses.UpdateResult;
+import com.example.sahilj.mevadaply.Responses.UserDetails;
+import com.example.sahilj.mevadaply.Utils.MyConstants;
 import com.example.sahilj.mevadaply.Utils.MyUtilities;
 import com.mikhaellopez.circularimageview.CircularImageView;
 
@@ -32,6 +37,7 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.util.regex.Pattern;
 
 import okhttp3.MediaType;
 import okhttp3.MultipartBody;
@@ -63,6 +69,8 @@ public class UserProfileFragment extends Fragment implements View.OnClickListene
     private File destination;
     private Uri image;
     private Button btnUpdate;
+    private UserDetails details;
+    private Pattern pattern;
 
     public UserProfileFragment(Activity activity, Bundle bundle) {
         this.activity = activity;
@@ -81,47 +89,66 @@ public class UserProfileFragment extends Fragment implements View.OnClickListene
         //Open Profile Update Activity for new User
 
         if(bundle ==null || bundle.getInt("time", 1) != 1) {
-            getUserData();
+            setUserDetails();
         }
 
         userImage.setOnClickListener(this);
 
         btnUpdate.setOnClickListener(this);
-
-        return view;
-    }
-
-    private void getUserData() {
-        Call<Result> call=apiInterface.getUserData(MyUtilities.getPhoneNumber());
-        call.enqueue(new Callback<Result>() {
+        pattern = Patterns.EMAIL_ADDRESS;
+        etUserFirstName.addTextChangedListener(new TextWatcher() {
             @Override
-            public void onResponse(Call<Result> call, Response<Result> response) {
-                if(response.body().isStatus())
-                {
-                    String url = response.body().getDetails().getUser_pic_url();
-                    String fname = response.body().getDetails().getUser_fname();
-                    String lname = response.body().getDetails().getUser_lname();
-                    String email = response.body().getDetails().getUser_email();
-                    String area = response.body().getDetails().getUser_area();
-                    String city = response.body().getDetails().getUser_city();
-
-                    if(destination==null)
-                        Glide.with(activity.getApplicationContext()).load(url).into(userImage);
-
-
-                    etUserFirstName.setText(fname);
-                    etUserLastName.setText(lname);
-                    etEmail.setText(email);
-                    etArea.setText(area);
-                    etCity.setText(city);
-                }
+            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+                etUserFirstName.setError(null);
             }
 
             @Override
-            public void onFailure(Call<Result> call, Throwable t) {
+            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+            }
+
+            @Override
+            public void afterTextChanged(Editable editable) {
 
             }
         });
+        etUserLastName.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+            }
+
+            @Override
+            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+                etUserLastName.setError(null);
+            }
+
+            @Override
+            public void afterTextChanged(Editable editable) {
+
+            }
+        });
+        return view;
+    }
+
+    private void setUserDetails() {
+        if(MyConstants.USER_DETAILS!=null) {
+            details = MyConstants.USER_DETAILS;
+            String url = details.getUser_pic_url();
+            String fname = details.getUser_fname();
+            String lname = details.getUser_lname();
+            String email = details.getUser_email();
+            String area = details.getUser_area();
+            String city = details.getUser_city();
+
+            if (destination == null)
+                Glide.with(activity.getApplicationContext()).load(url).into(userImage);
+
+            etUserFirstName.setText(fname);
+            etUserLastName.setText(lname);
+            etEmail.setText(email);
+            etArea.setText(area);
+            etCity.setText(city);
+        }
     }
 
     private void initialization(View view) {
@@ -141,7 +168,16 @@ public class UserProfileFragment extends Fragment implements View.OnClickListene
                 selectImage();
                 break;
             case R.id.btnUpdate:
-                updateData(view);
+                if(etUserFirstName.getText().toString().isEmpty())
+                    etUserFirstName.setError("Fill This!");
+                else if(etUserLastName.getText().toString().isEmpty())
+                    etUserLastName.setError("Fill This!");
+                else if(etEmail.getText().toString().isEmpty())
+                    etEmail.setError("Fill This!");
+                else if(!pattern.matcher(etEmail.getText().toString()).matches())
+                    etEmail.setError("Invalid Email!");
+                else
+                    updateData(view);
                 break;
         }
     }
@@ -191,16 +227,14 @@ public class UserProfileFragment extends Fragment implements View.OnClickListene
         builder.show();
     }
 
-    private void galleryIntent()
-    {
+    private void galleryIntent() {
         Intent intent = new Intent();
         intent.setType("image/*");
         intent.setAction(Intent.ACTION_GET_CONTENT);//
         startActivityForResult(Intent.createChooser(intent, "Select File"),SELECT_FILE);
     }
 
-    private void cameraIntent()
-    {
+    private void cameraIntent() {
         Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
         startActivityForResult(intent, REQUEST_CAMERA);
     }

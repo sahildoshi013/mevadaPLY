@@ -1,11 +1,19 @@
 package com.example.sahilj.mevadaply;
 
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Handler;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.widget.Toast;
 
+import com.example.sahilj.mevadaply.Responses.Result;
+import com.example.sahilj.mevadaply.Responses.TransResult;
+import com.example.sahilj.mevadaply.Responses.UserDetails;
+import com.example.sahilj.mevadaply.Utils.MyConstants;
+import com.example.sahilj.mevadaply.Utils.MyUtilities;
 import com.firebase.ui.auth.AuthUI;
 import com.firebase.ui.auth.ErrorCodes;
 import com.firebase.ui.auth.IdpResponse;
@@ -14,34 +22,27 @@ import com.google.firebase.auth.FirebaseUserMetadata;
 
 import java.util.Arrays;
 
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
+
+import static com.example.sahilj.mevadaply.Utils.MyConstants.apiInterface;
+
 public class SplashScreen extends AppCompatActivity {
 
     private static final int RC_SIGN_IN = 123;
-    private static final long SPLASH_TIME_OUT = 3000;
+    private static final String TAG = "Splash Screen";
     private FirebaseAuth auth;
     private Intent openWelcome;
+    private AlertDialog alertDialog;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        //FirebaseAuth.getInstance().signOut();
+        checkLogin();
 
-        new Handler().postDelayed(new Runnable() {
-
-            /*
-             * Showing splash screen with a timer. This will be useful when you
-             * want to show case your app logo / company
-             */
-
-            @Override
-            public void run() {
-                // This method will be executed once the timer is over
-                // Start your app main activity
-                checkLogin();
-            }
-        }, SPLASH_TIME_OUT);
     }
 
     private void checkLogin() {
@@ -50,10 +51,7 @@ public class SplashScreen extends AppCompatActivity {
         auth = FirebaseAuth.getInstance();
         if (auth.getCurrentUser() != null) {
             // already signed in
-
-            openWelcome.putExtra("time",1);
-            startActivity(openWelcome);
-            finish();
+            getUserData();
         } else {
             // not signed in
 
@@ -123,4 +121,63 @@ public class SplashScreen extends AppCompatActivity {
             Toast.makeText(this, "Fail", Toast.LENGTH_SHORT).show();
         }
     }
+
+    //Get User Data
+    public  void getUserData() {
+        AlertDialog.Builder alertBuilder=new AlertDialog.Builder(SplashScreen.this)
+                .setTitle("Error !")
+                .setMessage("No Internet")
+                .setNegativeButton("Ok", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
+                        finish();
+                    }
+                });
+        alertDialog = alertBuilder.create();
+        Call<Result> call=apiInterface.getUserData(MyUtilities.getPhoneNumber());
+        call.enqueue(new Callback<Result>() {
+            @Override
+            public void onResponse(Call<Result> call, Response<Result> response) {
+                if(response.body().isStatus())
+                {
+                    MyConstants.USER_DETAILS = response.body().getDetails();
+                    getTransactionData(response.body().getDetails());
+                }else{
+                    Intent intent = new Intent(getBaseContext(),ContainerActivity.class);
+                    intent.putExtra(MyConstants.TIME,0);
+                    intent.putExtra(MyConstants.TYPE,"profile");
+                    startActivity(intent);
+                }
+            }
+
+            @Override
+            public void onFailure(Call<Result> call, Throwable t) {
+                alertDialog.show();
+            }
+        });
+    }
+
+    //get Transaction Data
+    private void getTransactionData(final UserDetails details) {
+        Log.v(TAG,"Start Getting MyUtilities");
+        Call<TransResult> call=apiInterface.getTransactionData(MyUtilities.getPhoneNumber());
+        call.enqueue(new Callback<TransResult>() {
+            @Override
+            public void onResponse(Call<TransResult> call, Response<TransResult> response) {
+                if(response.body().isStatus()) {
+                    openWelcome.getIntExtra(MyConstants.POINTS,MyUtilities.getPointCount(response.body().getTransDetailsList()));
+                    openWelcome.putExtra(MyConstants.TIME,1);
+                    startActivity(openWelcome);
+                    finish();
+                }
+            }
+
+            @Override
+            public void onFailure(Call<TransResult> call, Throwable t) {
+                Log.v(TAG,"Fail Getting Transaction",t);
+                alertDialog.show();
+            }
+        });
+    }
+
 }

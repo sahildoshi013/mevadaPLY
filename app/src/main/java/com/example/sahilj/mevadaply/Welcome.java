@@ -1,5 +1,7 @@
 package com.example.sahilj.mevadaply;
 
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -21,6 +23,7 @@ import android.widget.Toast;
 import com.bumptech.glide.Glide;
 import com.example.sahilj.mevadaply.Responses.Result;
 import com.example.sahilj.mevadaply.Responses.TransResult;
+import com.example.sahilj.mevadaply.Responses.UserDetails;
 import com.example.sahilj.mevadaply.Utils.MyConstants;
 import com.example.sahilj.mevadaply.Utils.MyUtilities;
 import com.google.firebase.auth.FirebaseAuth;
@@ -44,6 +47,8 @@ public class Welcome extends AppCompatActivity
     private TextView drawerNumber;
     private TextView drawerName;
     private CircularImageView drawerProfilePic;
+    private AlertDialog alertDialog;
+    private UserDetails details;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -51,16 +56,6 @@ public class Welcome extends AppCompatActivity
         setContentView(R.layout.activity_welcome);
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-
-        //Open Profile Update Activity for new User
-        Bundle bundle = getIntent().getExtras();
-        if(bundle !=null && bundle.getInt("time", 1) != 1) {
-            Toast.makeText(this, "Welcome New User", Toast.LENGTH_SHORT).show();
-            Intent openProfile = new Intent(getBaseContext(),ContainerActivity.class);
-            openProfile.putExtra("time",1);
-            openProfile.putExtra(MyConstants.TYPE, MyConstants.TYPE_PROFILE);
-            startActivity(openProfile);
-        }
 
         FloatingActionButton fab = findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
@@ -81,10 +76,38 @@ public class Welcome extends AppCompatActivity
         navigationView.setNavigationItemSelectedListener(this);
 
         initialisingVariable();
-        getUserData();
-        getTransactionData();
+        setUserDetails();
 
+        //Open Profile Update Activity for new User
+        Bundle bundle = getIntent().getExtras();
+        if(bundle !=null){
+            if(bundle.getInt("time", 1) != 1) {
+                Intent openProfile = new Intent(getBaseContext(), ContainerActivity.class);
+                openProfile.putExtra(MyConstants.TIME, 1);
+                openProfile.putExtra(MyConstants.TYPE, MyConstants.TYPE_PROFILE);
+                startActivity(openProfile);
+            }
 
+            if(bundle.get(MyConstants.POINTS)!=null){
+                String points = "Total : " + bundle.getInt(MyConstants.POINTS);
+                userPoints.setText(points);
+            }
+        }
+    }
+
+    private void setUserDetails() {
+        if(MyConstants.USER_DETAILS!=null) {
+            details=MyConstants.USER_DETAILS;
+            String name = details.getUser_fname() + " " + details.getUser_lname();
+            String area = details.get_area();
+
+            Glide.with(getApplicationContext()).load(details.getUser_pic_url()).into(drawerProfilePic);
+            Glide.with(getApplicationContext()).load(details.getUser_pic_url()).into(profilePic);
+            drawerName.setText(name);
+            drawerNumber.setText(details.getUser_phone());
+            userName.setText(name);
+            userAddress.setText(area);
+        }
     }
 
     private void initialisingVariable() {
@@ -96,6 +119,7 @@ public class Welcome extends AppCompatActivity
         drawerProfilePic = view.findViewById(R.id.imgDrawerProfilePic);
         drawerName = view.findViewById(R.id.tvDrawerUserName);
         drawerNumber = view.findViewById(R.id.tvDrawerUserNumber);
+        userPoints.setText("Total : 0");
     }
 
     @Override
@@ -183,41 +207,33 @@ public class Welcome extends AppCompatActivity
     protected void onResume() {
         super.onResume();
         getUserData();
-        getTransactionData();
     }
 
-    //Get User Data
     public  void getUserData() {
-
         Call<Result> call=apiInterface.getUserData(MyUtilities.getPhoneNumber());
         call.enqueue(new Callback<Result>() {
             @Override
             public void onResponse(Call<Result> call, Response<Result> response) {
+                getTransactionData();
                 if(response.body().isStatus())
                 {
-                    String name = response.body().getDetails().getUser_fname() + " " + response.body().getDetails().getUser_lname();
-                    String area = response.body().getDetails().get_area();
-
-                    Glide.with(getApplicationContext()).load(response.body().getDetails().getUser_pic_url()).into(drawerProfilePic);
-                    Glide.with(getApplicationContext()).load(response.body().getDetails().getUser_pic_url()).into(profilePic);
-                    drawerName.setText(name);
-                    drawerNumber.setText(response.body().getDetails().getUser_phone());
-                    userName.setText(name);
-                    userAddress.setText(area);
+                    MyConstants.USER_DETAILS = response.body().getDetails();
+                    setUserDetails();
                 }else{
                     Intent intent = new Intent(getBaseContext(),ContainerActivity.class);
-                    intent.putExtra("time",0);
-                    intent.putExtra("type","profile");
+                    intent.putExtra(MyConstants.TIME,0);
+                    intent.putExtra(MyConstants.TYPE,"profile");
                     startActivity(intent);
                 }
             }
 
             @Override
             public void onFailure(Call<Result> call, Throwable t) {
-
+                Toast.makeText(Welcome.this, "No Internet!", Toast.LENGTH_SHORT).show();
             }
         });
     }
+
 
     //get Transaction Data
     private void getTransactionData() {
@@ -226,16 +242,17 @@ public class Welcome extends AppCompatActivity
         call.enqueue(new Callback<TransResult>() {
             @Override
             public void onResponse(Call<TransResult> call, Response<TransResult> response) {
-                String points = "Total : 0";
                 if(response.body().isStatus()) {
-                    points = "Total : " + MyUtilities.getPointCount(response.body().getTransDetailsList());
+                    String points = "Total : " + MyUtilities.getPointCount(response.body().getTransDetailsList());
+                    userPoints.setText(points);
                 }
-                userPoints.setText(points);
+
             }
 
             @Override
             public void onFailure(Call<TransResult> call, Throwable t) {
                 Log.v(TAG,"Fail Getting MyUtilities",t);
+                Toast.makeText(Welcome.this, "No Internet!", Toast.LENGTH_SHORT).show();
             }
         });
     }
