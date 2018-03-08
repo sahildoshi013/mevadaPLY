@@ -119,7 +119,7 @@ public class UserProfileFragment extends Fragment implements View.OnClickListene
 
             @Override
             public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-                etUserLastName.setError(null);
+                etUserLastName.setError(null);  
             }
 
             @Override
