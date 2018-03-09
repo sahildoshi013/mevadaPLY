@@ -14,6 +14,7 @@ import android.view.ViewGroup;
 import com.example.sahilj.mevadaply.Adapters.MyHistoryAdapter;
 import com.example.sahilj.mevadaply.Responses.TransDetails;
 import com.example.sahilj.mevadaply.Responses.TransResult;
+import com.example.sahilj.mevadaply.Utils.MyConstants;
 import com.example.sahilj.mevadaply.Utils.MyUtilities;
 
 import java.util.ArrayList;
@@ -24,6 +25,7 @@ import retrofit2.Callback;
 import retrofit2.Response;
 
 import static com.example.sahilj.mevadaply.Utils.MyConstants.apiInterface;
+import static com.firebase.ui.auth.AuthUI.getApplicationContext;
 
 
 /**
@@ -34,13 +36,11 @@ public class HistoryFragment extends Fragment {
 
     private static final String TAG = "History";
     private static List<TransDetails> data;
-    private final Activity activity;
     private RecyclerView rvHistoryView;
     private MyHistoryAdapter adapter;
 
-    public HistoryFragment(Activity activity) {
+    public HistoryFragment() {
         // Required empty public constructor
-        this.activity = activity;
     }
 
 
@@ -56,7 +56,7 @@ public class HistoryFragment extends Fragment {
 
         data = new ArrayList<>();
 
-        LinearLayoutManager mLayoutManager = new LinearLayoutManager(activity.getApplicationContext());
+        LinearLayoutManager mLayoutManager = new LinearLayoutManager(getContext());
         rvHistoryView.setLayoutManager(mLayoutManager);
 
         return view;

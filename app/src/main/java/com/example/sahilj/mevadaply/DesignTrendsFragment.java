@@ -14,6 +14,7 @@ import android.view.ViewGroup;
 import com.example.sahilj.mevadaply.Adapters.MyDesignTrendsAdapter;
 import com.example.sahilj.mevadaply.Responses.DesignTrendsDetail;
 import com.example.sahilj.mevadaply.Responses.DesignTrendsResult;
+import com.example.sahilj.mevadaply.Utils.MyConstants;
 
 import java.util.List;
 
@@ -32,11 +33,9 @@ public class DesignTrendsFragment extends Fragment {
 
     private static final String TAG = "Design Trends";
     private RecyclerView rvDesignTrends;
-    private Activity activity;
 
-    public DesignTrendsFragment(Activity activity) {
+    public DesignTrendsFragment() {
         // Required empty public constructor
-        this.activity=activity;
     }
 
 
@@ -46,9 +45,10 @@ public class DesignTrendsFragment extends Fragment {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_design_trends, container, false);
 
+
         rvDesignTrends=view.findViewById(R.id.rvDesignTrends);
 
-        LinearLayoutManager mLayoutManager = new LinearLayoutManager(activity.getApplicationContext());
+        LinearLayoutManager mLayoutManager = new LinearLayoutManager(getContext());
         rvDesignTrends.setLayoutManager(mLayoutManager);
 
         getDesignTrends();

@@ -30,6 +30,7 @@ import com.example.sahilj.mevadaply.Responses.UpdateResult;
 import com.example.sahilj.mevadaply.Responses.UserDetails;
 import com.example.sahilj.mevadaply.Utils.MyConstants;
 import com.example.sahilj.mevadaply.Utils.MyUtilities;
+import com.firebase.ui.auth.data.model.User;
 import com.mikhaellopez.circularimageview.CircularImageView;
 
 import java.io.ByteArrayOutputStream;
@@ -47,7 +48,6 @@ import retrofit2.Callback;
 import retrofit2.Response;
 
 import static com.example.sahilj.mevadaply.Utils.MyConstants.apiInterface;
-import static com.firebase.ui.auth.AuthUI.getApplicationContext;
 
 
 /**
@@ -56,8 +56,6 @@ import static com.firebase.ui.auth.AuthUI.getApplicationContext;
 public class UserProfileFragment extends Fragment implements View.OnClickListener {
 
     private static final String TAG = "Profile";
-    private final Activity activity;
-    private final Bundle bundle;
     private CircularImageView userImage;
     private EditText etCity;
     private EditText etUserFirstName;
@@ -72,9 +70,7 @@ public class UserProfileFragment extends Fragment implements View.OnClickListene
     private UserDetails details;
     private Pattern pattern;
 
-    public UserProfileFragment(Activity activity, Bundle bundle) {
-        this.activity = activity;
-        this.bundle=bundle;
+    public UserProfileFragment() {
         // Required empty public constructor
     }
 
@@ -84,18 +80,25 @@ public class UserProfileFragment extends Fragment implements View.OnClickListene
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_user_profile, container, false);
+
         initialization(view);
 
-        //Open Profile Update Activity for new User
+        Bundle bundle = getArguments();
 
-        if(bundle ==null || bundle.getInt("time", 1) != 1) {
-            setUserDetails();
+        if (bundle != null) {
+            if(bundle.getInt(MyConstants.TIME, 1) != 1) {
+                setUserDetails();
+            }
         }
+
+
+        //Open Profile Update Activity for new User
 
         userImage.setOnClickListener(this);
 
         btnUpdate.setOnClickListener(this);
         pattern = Patterns.EMAIL_ADDRESS;
+
         etUserFirstName.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
@@ -112,6 +115,7 @@ public class UserProfileFragment extends Fragment implements View.OnClickListene
 
             }
         });
+
         etUserLastName.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
@@ -119,7 +123,7 @@ public class UserProfileFragment extends Fragment implements View.OnClickListene
 
             @Override
             public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-                etUserLastName.setError(null);  
+                etUserLastName.setError(null);
             }
 
             @Override
@@ -127,6 +131,7 @@ public class UserProfileFragment extends Fragment implements View.OnClickListene
 
             }
         });
+
         return view;
     }
 
@@ -141,7 +146,7 @@ public class UserProfileFragment extends Fragment implements View.OnClickListene
             String city = details.getUser_city();
 
             if (destination == null)
-                Glide.with(activity.getApplicationContext()).load(url).into(userImage);
+                Glide.with(UserProfileFragment.this).load(url).into(userImage);
 
             etUserFirstName.setText(fname);
             etUserLastName.setText(lname);
@@ -193,7 +198,7 @@ public class UserProfileFragment extends Fragment implements View.OnClickListene
                         galleryIntent();
                 } else {
                     //code for deny
-                    Toast.makeText(activity, "You can't choose Image.", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getActivity(), "You can't choose Image.", Toast.LENGTH_SHORT).show();
                 }
                 break;
         }
@@ -203,12 +208,12 @@ public class UserProfileFragment extends Fragment implements View.OnClickListene
         final CharSequence[] items = { "Take Photo", "Choose from Library",
                 "Cancel" };
 
-        AlertDialog.Builder builder = new AlertDialog.Builder(activity);
+        AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
         builder.setTitle("Choose Photo!");
         builder.setItems(items, new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int item) {
-                boolean result= MyUtilities.checkPermission(activity);
+                boolean result= MyUtilities.checkPermission(getActivity());
 
                 if (items[item].equals("Take Photo")) {
                     userChoosenTask ="Take Photo";
@@ -248,7 +253,7 @@ public class UserProfileFragment extends Fragment implements View.OnClickListene
                 image = data.getData();
                 userImage.setImageURI(image);
 
-                destination = new File(MyUtilities.getPath(image,activity.getApplicationContext()));
+                destination = new File(MyUtilities.getPath(image,getContext()));
 
                 //onSelectFromGalleryResult(data);
             }
@@ -280,8 +285,8 @@ public class UserProfileFragment extends Fragment implements View.OnClickListene
             e.printStackTrace();
         }
 
-        Glide.with(activity.getApplicationContext()).load(destination).into(userImage);
-        Toast.makeText(activity, "Hello", Toast.LENGTH_SHORT).show();
+        Glide.with(UserProfileFragment.this).load(destination).into(userImage);
+        Toast.makeText(getContext(), "Hello", Toast.LENGTH_SHORT).show();
         userImage.setImageBitmap(thumbnail);
     }
 
@@ -308,7 +313,7 @@ public class UserProfileFragment extends Fragment implements View.OnClickListene
             @Override
             public void onResponse(Call<UpdateResult> call, Response<UpdateResult> response) {
                 if(response.body().isSuccess()){
-                    Toast.makeText(activity, "Success", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getContext(), "Success", Toast.LENGTH_SHORT).show();
                 }
             }
 

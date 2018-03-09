@@ -16,6 +16,7 @@ import com.example.sahilj.mevadaply.Adapters.MyRedeemOfferAdapter;
 import com.example.sahilj.mevadaply.Responses.OfferDetail;
 import com.example.sahilj.mevadaply.Responses.RedeemOfferResult;
 import com.example.sahilj.mevadaply.Responses.TransResult;
+import com.example.sahilj.mevadaply.Utils.MyConstants;
 import com.example.sahilj.mevadaply.Utils.MyUtilities;
 
 import java.util.List;
@@ -35,11 +36,9 @@ public class RedeemOfferFragment extends Fragment {
 
     private static final String TAG = "Redeem Fragment";
     private RecyclerView rvRedeemOffer;
-    private Activity activity;
 
-    public RedeemOfferFragment(Activity activity) {
+    public RedeemOfferFragment() {
         // Required empty public constructor
-        this.activity=activity;
     }
 
 
@@ -48,9 +47,10 @@ public class RedeemOfferFragment extends Fragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_redeem_offer, container, false);
+
         rvRedeemOffer=view.findViewById(R.id.rvRedeemOffer);
 
-        LinearLayoutManager mLayoutManager = new LinearLayoutManager(activity.getApplicationContext());
+        LinearLayoutManager mLayoutManager = new LinearLayoutManager(getContext());
         rvRedeemOffer.setLayoutManager(mLayoutManager);
 
         getRedeemOffer();

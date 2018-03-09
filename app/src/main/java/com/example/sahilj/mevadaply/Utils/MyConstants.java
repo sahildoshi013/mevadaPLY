@@ -42,6 +42,7 @@ public class MyConstants {
     public static final String USER_DATA = "user_data";
     public static final String TRANS_DATA = "transaction_data";
     public static final String POINTS = "points";
+    public static final String ACTIVTY = "activity";
     public static UserDetails USER_DETAILS = null;
 
     public static ApiInterface apiInterface= ApiClient.getClient().create(ApiInterface.class);

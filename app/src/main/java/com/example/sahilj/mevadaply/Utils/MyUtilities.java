@@ -98,7 +98,7 @@ public class MyUtilities {
         if (user != null) {
             return user.getPhoneNumber();
         }
-        return null;
+        return "0";
     }
 
     public static void updateMobileNumber(String oldnumber, String phoneNumber, Context applicationContext) {
