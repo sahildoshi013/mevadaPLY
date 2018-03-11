@@ -10,8 +10,6 @@ import com.example.sahilj.mevadaply.Responses.UserDetails;
 import java.util.Arrays;
 import java.util.List;
 
-import static com.firebase.ui.auth.AuthUI.getApplicationContext;
-
 /**
  * Created by Sahil J on 2/27/2018.
  */
@@ -43,8 +41,14 @@ public class MyConstants {
     public static final String TRANS_DATA = "transaction_data";
     public static final String POINTS = "points";
     public static final String ACTIVTY = "activity";
+    public static final String DEFAULT_POINTS = "Total : 0";
     public static UserDetails USER_DETAILS = null;
 
     public static ApiInterface apiInterface= ApiClient.getClient().create(ApiInterface.class);
 
+    public static AlertDialog alertBox(Context context){
+        return new AlertDialog.Builder(context)
+                .setTitle("Error !")
+                .setMessage("No Internet").create();
+    }
 }

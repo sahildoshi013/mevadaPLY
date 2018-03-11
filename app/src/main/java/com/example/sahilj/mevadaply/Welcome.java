@@ -17,6 +17,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.ShareActionProvider;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -47,8 +48,6 @@ public class Welcome extends AppCompatActivity
     private TextView drawerNumber;
     private TextView drawerName;
     private CircularImageView drawerProfilePic;
-    private AlertDialog alertDialog;
-    private UserDetails details;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -61,8 +60,9 @@ public class Welcome extends AppCompatActivity
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-                        .setAction("Action", null).show();
+                /*Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
+                        .setAction("Action", null).show();*/
+                setShareIntent();
             }
         });
 
@@ -81,7 +81,7 @@ public class Welcome extends AppCompatActivity
         //Open Profile Update Activity for new User
         Bundle bundle = getIntent().getExtras();
         if(bundle !=null){
-            if(bundle.getInt("time", 1) != 1) {
+            if(bundle.getInt(MyConstants.TIME, 1) != 1) {
                 Intent openProfile = new Intent(getBaseContext(), ContainerActivity.class);
                 openProfile.putExtra(MyConstants.TIME, 1);
                 openProfile.putExtra(MyConstants.TYPE, MyConstants.TYPE_PROFILE);
@@ -97,7 +97,7 @@ public class Welcome extends AppCompatActivity
 
     private void setUserDetails() {
         if(MyConstants.USER_DETAILS!=null) {
-            details=MyConstants.USER_DETAILS;
+            UserDetails details = MyConstants.USER_DETAILS;
             String name = details.getUser_fname() + " " + details.getUser_lname();
             String area = details.get_area();
 
@@ -119,7 +119,8 @@ public class Welcome extends AppCompatActivity
         drawerProfilePic = view.findViewById(R.id.imgDrawerProfilePic);
         drawerName = view.findViewById(R.id.tvDrawerUserName);
         drawerNumber = view.findViewById(R.id.tvDrawerUserNumber);
-        userPoints.setText("Total : 0");
+
+        userPoints.setText(MyConstants.DEFAULT_POINTS);
     }
 
     @Override
@@ -132,11 +133,19 @@ public class Welcome extends AppCompatActivity
         }
     }
 
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.welcome, menu);
-        return true;
+    // Call to update the share intent
+    private void setShareIntent() {
+        try {
+            Intent i = new Intent(Intent.ACTION_SEND);
+            i.setType("text/plain");
+            i.putExtra(Intent.EXTRA_SUBJECT, "Mevada PLY");
+            String sAux = "\nLet me recommend you Mevada PLY application\n\n";
+            sAux = sAux + "https://play.google.com/store/apps/details?id=Orion.Soft \n\n";
+            i.putExtra(Intent.EXTRA_TEXT, sAux);
+            startActivity(Intent.createChooser(i, "choose one"));
+        } catch(Exception e) {
+            //e.toString();
+        }
     }
 
     @Override
@@ -176,7 +185,7 @@ public class Welcome extends AppCompatActivity
         } else if (id == R.id.nav_manage) {
 
         } else if (id == R.id.nav_share) {
-
+            setShareIntent();
         } else if (id == R.id.nav_logout) {
             FirebaseAuth.getInstance().signOut();
             Intent intent = new Intent(getBaseContext(),SplashScreen.class);
@@ -222,7 +231,7 @@ public class Welcome extends AppCompatActivity
                 }else{
                     Intent intent = new Intent(getBaseContext(),ContainerActivity.class);
                     intent.putExtra(MyConstants.TIME,0);
-                    intent.putExtra(MyConstants.TYPE,"profile");
+                    intent.putExtra(MyConstants.TYPE,MyConstants.TYPE_PROFILE);
                     startActivity(intent);
                 }
             }

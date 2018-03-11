@@ -2,12 +2,15 @@ package com.example.sahilj.mevadaply.Responses;
 
 import android.app.Activity;
 import android.content.SharedPreferences;
+import android.util.Log;
 
 import com.example.sahilj.mevadaply.APIs.ApiClient;
 import com.example.sahilj.mevadaply.Utils.MyConstants;
 import com.google.gson.annotations.SerializedName;
 
 import java.io.Serializable;
+import java.sql.Date;
+import java.sql.Timestamp;
 
 import static android.content.Context.MODE_PRIVATE;
 
@@ -68,7 +71,7 @@ public class UserDetails implements Serializable {
     public String get_area(){
         String area = "";
         area += user_area;
-        if(!user_city.isEmpty())
+        if(!user_area.isEmpty() && !user_city.isEmpty())
             area+=", ";
         area += user_city;
 
@@ -116,7 +119,4 @@ public class UserDetails implements Serializable {
         this.user_pic_url = user_pic_url;
     }
 
-    public void setUser_create_time(String user_create_time) {
-        this.user_create_time = user_create_time;
-    }
 }

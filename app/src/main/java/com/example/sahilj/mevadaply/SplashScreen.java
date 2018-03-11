@@ -41,6 +41,14 @@ public class SplashScreen extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        alertDialog = MyConstants.alertBox(SplashScreen.this);
+        alertDialog.setButton(DialogInterface.BUTTON_NEGATIVE, "Ok", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialogInterface, int i) {
+                finish();
+            }
+        });
+
         checkLogin();
 
     }
@@ -100,19 +108,22 @@ public class SplashScreen extends AppCompatActivity {
                 if (response == null) {
                     // User pressed back button
                     //showSnackbar(R.string.sign_in_cancelled);
-                    Toast.makeText(this, "Cancelled", Toast.LENGTH_SHORT).show();
+                    //Toast.makeText(this, "Cancelled", Toast.LENGTH_SHORT).show();
+                    finish();
                     return;
                 }
 
                 if (response.getErrorCode() == ErrorCodes.NO_NETWORK) {
                     //showSnackbar(R.string.no_internet_connection);
                     Toast.makeText(this, "No Internet", Toast.LENGTH_SHORT).show();
+                    alertDialog.show();
                     return;
                 }
 
                 if (response.getErrorCode() == ErrorCodes.UNKNOWN_ERROR) {
                     //showSnackbar(R.string.unknown_error);
                     Toast.makeText(this, "Unknown Error", Toast.LENGTH_SHORT).show();
+                    alertDialog.show();
                     return;
                 }
             }
@@ -124,16 +135,6 @@ public class SplashScreen extends AppCompatActivity {
 
     //Get User Data
     public  void getUserData() {
-        AlertDialog.Builder alertBuilder=new AlertDialog.Builder(SplashScreen.this)
-                .setTitle("Error !")
-                .setMessage("No Internet")
-                .setNegativeButton("Ok", new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialogInterface, int i) {
-                        finish();
-                    }
-                });
-        alertDialog = alertBuilder.create();
         Call<Result> call=apiInterface.getUserData(MyUtilities.getPhoneNumber());
         call.enqueue(new Callback<Result>() {
             @Override
@@ -152,6 +153,8 @@ public class SplashScreen extends AppCompatActivity {
 
             @Override
             public void onFailure(Call<Result> call, Throwable t) {
+                Log.v(TAG,"Message : "+t.getMessage() ,t);
+                Toast.makeText(SplashScreen.this, "Fail User", Toast.LENGTH_SHORT).show();
                 alertDialog.show();
             }
         });
@@ -175,6 +178,7 @@ public class SplashScreen extends AppCompatActivity {
             @Override
             public void onFailure(Call<TransResult> call, Throwable t) {
                 Log.v(TAG,"Fail Getting Transaction",t);
+                Toast.makeText(SplashScreen.this, "Fail tr", Toast.LENGTH_SHORT).show();
                 alertDialog.show();
             }
         });

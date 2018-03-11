@@ -3,6 +3,7 @@ package com.example.sahilj.mevadaply.APIs;
 
 import com.example.sahilj.mevadaply.Responses.DesignDetailResult;
 import com.example.sahilj.mevadaply.Responses.DesignTrendsResult;
+import com.example.sahilj.mevadaply.Responses.InsertResult;
 import com.example.sahilj.mevadaply.Responses.RedeemOfferResult;
 import com.example.sahilj.mevadaply.Responses.Result;
 import com.example.sahilj.mevadaply.Responses.TransResult;
@@ -57,6 +58,12 @@ public interface ApiInterface {
     @FormUrlEncoded
     @POST("designDetails.php")
     Call<DesignDetailResult> getDesignDetails(@Field("design_id") int design_id);
+
+
+    @FormUrlEncoded
+    @POST("insertRequest.php")
+    Call<InsertResult> redeemPoints(@Field("design_id") int design_id,
+                                    @Field("Phone_No") String phone_no);
 
     /*@FormUrlEncoded
     @POST("login.php")
