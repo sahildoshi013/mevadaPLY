@@ -43,7 +43,7 @@ public class ContainerActivity extends AppCompatActivity {
             if(bundle.get(MyConstants.TYPE).equals(MyConstants.TYPE_DESIGN)) {
                 DesignTrendsFragment designTrendsFragment=new DesignTrendsFragment();
                 designTrendsFragment.setArguments(bundle);
-                getSupportFragmentManager().beginTransaction().replace(frmContainer.getId(),designTrendsFragment).addToBackStack(null).commit();
+                getSupportFragmentManager().beginTransaction().replace(frmContainer.getId(),designTrendsFragment).commit();
             }
         }
     }

@@ -13,18 +13,20 @@
         app:civ_border_width="4dp"
         app:civ_shadow="true"
         app:civ_shadow_radius="10"
-        app:civ_shadow_color="#ce000000"/>
+        app:civ_shadow_color="#ce000000"
+        android:src="@mipmap/ic_launcher"/>
 
     <TextView
         android:id="@+id/tvRoTitle"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="90dp"
         android:layout_toEndOf="@id/roImg"
         android:layout_toRightOf="@id/roImg"
         android:minLines="2"
         android:textColor="@android:color/black"
         android:textSize="20sp"
-        android:gravity="center_vertical"/>
+        android:gravity="center_vertical"
+        android:padding="10dp"/>
 
     <TextView
         android:id="@+id/tvRoDesc"

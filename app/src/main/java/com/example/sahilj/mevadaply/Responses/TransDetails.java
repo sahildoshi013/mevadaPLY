@@ -45,7 +45,7 @@ public class TransDetails implements Serializable {
 
     public String getTrans_time() {
         Calendar mydate = Calendar.getInstance();
-        mydate.setTimeInMillis(Long.parseLong(trans_time));
+        mydate.setTimeInMillis(Long.parseLong(trans_time)*1000);
         return mydate.get(Calendar.DAY_OF_MONTH)+"/"+mydate.get(Calendar.MONTH)+"/"+mydate.get(Calendar.YEAR);
     }
 

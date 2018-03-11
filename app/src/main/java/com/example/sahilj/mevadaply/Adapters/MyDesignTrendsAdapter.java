@@ -52,8 +52,6 @@ public class MyDesignTrendsAdapter extends RecyclerView.Adapter<MyDesignTrendsAd
         String url = detail.getUrl();
         if(!url.equals(MyConstants.NULL_URL))
             Glide.with(activity).load(detail.getUrl()).into(holder.imgDesignImage);
-        else
-            holder.tvDesignName.setTextColor(activity.getResources().getColor(R.color.colorPrimary));
         holder.tvDesignName.setText(detail.getDesign_name());
 
         holder.cvDesignContain.setOnClickListener(new View.OnClickListener() {
