@@ -3,6 +3,7 @@ package com.example.sahilj.mevadaply;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.FloatingActionButton;
@@ -22,13 +23,20 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
+import com.example.sahilj.mevadaply.Responses.InsertResult;
 import com.example.sahilj.mevadaply.Responses.Result;
 import com.example.sahilj.mevadaply.Responses.TransResult;
 import com.example.sahilj.mevadaply.Responses.UserDetails;
 import com.example.sahilj.mevadaply.Utils.MyConstants;
 import com.example.sahilj.mevadaply.Utils.MyUtilities;
+import com.firebase.ui.auth.AuthUI;
+import com.firebase.ui.auth.ErrorCodes;
+import com.firebase.ui.auth.IdpResponse;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUserMetadata;
 import com.mikhaellopez.circularimageview.CircularImageView;
+
+import java.util.Arrays;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -40,6 +48,7 @@ public class Welcome extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
 
     private static final String TAG = "Welcome";
+    private static final int RC_SIGN_IN = 1;
     private CircularImageView profilePic;
     private TextView userName;
     private TextView userPoints;
@@ -48,6 +57,8 @@ public class Welcome extends AppCompatActivity
     private TextView drawerNumber;
     private TextView drawerName;
     private CircularImageView drawerProfilePic;
+    private AlertDialog alertDialog;
+    private FirebaseAuth auth;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -74,6 +85,9 @@ public class Welcome extends AppCompatActivity
 
         navigationView = findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
+
+        alertDialog = MyConstants.alertBox(Welcome.this);
+        auth= FirebaseAuth.getInstance();
 
         initialisingVariable();
         setUserDetails();
@@ -166,7 +180,7 @@ public class Welcome extends AppCompatActivity
             intent.putExtra(MyConstants.TYPE,MyConstants.TYPE_HISTORY);
             startActivity(intent);
         } else if (id == R.id.nav_changeNumber) {
-
+            changeNumber();
         }
         /*else if (id == R.id.nav_manage) {
 
@@ -182,6 +196,117 @@ public class Welcome extends AppCompatActivity
         DrawerLayout drawer = findViewById(R.id.drawer_layout);
         drawer.closeDrawer(GravityCompat.START);
         return true;
+    }
+
+    private void changeNumber() {
+        SharedPreferences sharedPreferences = getSharedPreferences(MyConstants.SHAREDPRENAME,MODE_PRIVATE);
+        SharedPreferences.Editor editor=sharedPreferences.edit();
+        editor.putString(MyConstants.OLD_NUMBER,MyUtilities.getPhoneNumber());
+        editor.apply();
+
+        //FirebaseAuth.getInstance().signOut();
+
+        alertDialog.setTitle("Error !");
+        alertDialog.setMessage("Something went wrong!\nlogin using This NUMBER : "+ MyUtilities.getPhoneNumber());
+        alertDialog.setButton(DialogInterface.BUTTON_NEGATIVE, "Ok", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialogInterface, int i) {
+                auth.signOut();
+                Intent intent = new Intent(getApplicationContext(),SplashScreen.class);
+                startActivity(intent);
+                finish();
+            }
+        });
+
+        //FirebaseAuth.getInstance().signOut();
+
+        AuthUI.IdpConfig.PhoneBuilder phoneBuilder = new AuthUI.IdpConfig.PhoneBuilder().setDefaultCountryIso("IN");
+
+        startActivityForResult(
+                AuthUI.getInstance()
+                        .createSignInIntentBuilder()
+                        .setAvailableProviders(Arrays.asList(
+                                phoneBuilder.build()))
+                        .build(),
+                RC_SIGN_IN);
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+
+        if(requestCode == RC_SIGN_IN){
+            IdpResponse response = IdpResponse.fromResultIntent(data);
+
+            // Successfully signed in
+            if (resultCode == RESULT_OK) {
+                //startActivity(SignedInActivity.createIntent(this, response));
+                //finish();
+
+                SharedPreferences sharedPreferences = getSharedPreferences(MyConstants.SHAREDPRENAME,MODE_PRIVATE);
+                String old_number = sharedPreferences.getString(MyConstants.OLD_NUMBER,null);
+                String new_phone = MyUtilities.getPhoneNumber();
+                if(old_number.compareTo(new_phone)!=0)
+                    updateNumber(sharedPreferences.getString(MyConstants.OLD_NUMBER,null),MyUtilities.getPhoneNumber());
+                return;
+            } else {
+                // Sign in failed
+                if (response == null) {
+                    // User pressed back button
+                    //showSnackbar(R.string.sign_in_cancelled);
+                    Toast.makeText(this, "Cancelled", Toast.LENGTH_SHORT).show();
+                    return;
+                }
+
+                if (response.getErrorCode() == ErrorCodes.NO_NETWORK) {
+                    //showSnackbar(R.string.no_internet_connection);
+                    Toast.makeText(this, "No Internet", Toast.LENGTH_SHORT).show();
+                    //alertDialog.show();
+                    return;
+                }
+
+                if (response.getErrorCode() == ErrorCodes.UNKNOWN_ERROR) {
+                    //showSnackbar(R.string.unknown_error);
+                    Toast.makeText(this, "Unknown Error", Toast.LENGTH_SHORT).show();
+                    //alertDialog.show();
+                    return;
+                }
+            }
+
+            //showSnackbar(R.string.unknown_sign_in_response);
+            Toast.makeText(this, "Fail", Toast.LENGTH_SHORT).show();
+        }
+    }
+
+    private void updateNumber(String string, String phoneNumber) {
+        Log.v(TAG,"Old " + string + " new "+phoneNumber);
+
+        Call<InsertResult> call = MyConstants.apiInterface.updateMobileNumber(string,phoneNumber);
+
+        call.enqueue(new Callback<InsertResult>() {
+            @Override
+            public void onResponse(Call<InsertResult> call, Response<InsertResult> response) {
+                if(response.body().isSuccess())
+                {
+                    Toast.makeText(Welcome.this, "Success", Toast.LENGTH_SHORT).show();
+                    alertDialog.setTitle("Success !");
+                    alertDialog.setMessage("Your Mobile Number is Updated.");
+                    alertDialog.setButton(DialogInterface.BUTTON_NEGATIVE, "Ok", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialogInterface, int i) {
+                            alertDialog.dismiss();
+                        }
+                    });
+                }
+                alertDialog.show();
+            }
+
+            @Override
+            public void onFailure(Call<InsertResult> call, Throwable t) {
+                alertDialog.show();
+            }
+        });
+
     }
 
     public void showRedeemOffers(View view) {

@@ -42,6 +42,8 @@ public class MyConstants {
     public static final String POINTS = "points";
     public static final String ACTIVTY = "activity";
     public static final String DEFAULT_POINTS = "Total : 0";
+    public static final String SHAREDPRENAME = "MevadaPLY";
+    public static final String OLD_NUMBER = "Old_Number";
     public static UserDetails USER_DETAILS = null;
 
     public static ApiInterface apiInterface= ApiClient.getClient().create(ApiInterface.class);

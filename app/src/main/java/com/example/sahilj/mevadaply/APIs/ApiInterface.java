@@ -31,11 +31,6 @@ public interface ApiInterface {
     Call<Result> getUserData(@Field("user_id") String user);
 
     @FormUrlEncoded
-    @POST("updateMobileNumber.php")
-    Call<Result> updateMobileNumber(@Field("user_old_number") String user_old_number,@Field("user_new_number") String user_new_number);
-
-
-    @FormUrlEncoded
     @POST("userTransaction.php")
     Call<TransResult> getTransactionData(@Field("user_id") String user);
 
@@ -64,6 +59,12 @@ public interface ApiInterface {
     @POST("insertRequest.php")
     Call<InsertResult> redeemPoints(@Field("design_id") int design_id,
                                     @Field("Phone_No") String phone_no);
+
+    @FormUrlEncoded
+    @POST("updateMobileNumber.php")
+    Call<InsertResult> updateMobileNumber(@Field("user_old_number") String user_old_number,
+                                    @Field("user_new_number") String user_new_number);
+
 
     /*@FormUrlEncoded
     @POST("login.php")

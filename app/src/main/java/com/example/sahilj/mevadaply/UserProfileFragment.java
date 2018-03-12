@@ -193,9 +193,7 @@ public class UserProfileFragment extends Fragment implements View.OnClickListene
                     etUserFirstName.setError("Fill This!");
                 else if(etUserLastName.getText().toString().isEmpty())
                     etUserLastName.setError("Fill This!");
-                else if(etEmail.getText().toString().isEmpty())
-                    etEmail.setError("Fill This!");
-                else if(!pattern.matcher(etEmail.getText().toString()).matches())
+                else if(!etEmail.getText().toString().isEmpty() && !pattern.matcher(etEmail.getText().toString()).matches())
                     etEmail.setError("Invalid Email!");
                 else
                     updateData(view);

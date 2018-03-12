@@ -46,7 +46,7 @@
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:hint="@string/first_name"
-            android:inputType="textCapWords"
+            android:inputType="textPersonName|textCapWords"
             android:nextFocusDown="@id/etLastName"
             android:selectAllOnFocus="true" />
 
@@ -56,7 +56,7 @@
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:hint="@string/last_name"
-            android:inputType="textCapWords"
+            android:inputType="textPersonName|textCapWords"
             android:nextFocusDown="@id/etEmail"
             android:selectAllOnFocus="true"/>
 
