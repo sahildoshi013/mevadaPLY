@@ -45,6 +45,9 @@ dependencies {
 
     //Card view
     compile 'com.android.support:cardview-v7:26.1.0'
+
+    //Image Compressor
+    compile 'id.zelory:compressor:2.1.0'
 }
 
 

@@ -2,18 +2,26 @@ package com.example.sahilj.mevadaply;
 
 
 import android.app.Activity;
+import android.content.ContentUris;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.database.Cursor;
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.net.Uri;
+import android.os.AsyncTask;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.Environment;
+import android.provider.DocumentsContract;
 import android.provider.MediaStore;
 import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
 import android.support.v7.app.AlertDialog;
 import android.text.Editable;
+import android.text.TextUtils;
 import android.text.TextWatcher;
 import android.util.Log;
 import android.util.Patterns;
@@ -38,8 +46,14 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.util.Calendar;
+import java.util.Collections;
+import java.util.Date;
+import java.util.HashSet;
+import java.util.Set;
 import java.util.regex.Pattern;
 
+import id.zelory.compressor.Compressor;
 import okhttp3.MediaType;
 import okhttp3.MultipartBody;
 import okhttp3.RequestBody;
@@ -47,6 +61,7 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
+import static android.app.Activity.RESULT_OK;
 import static com.example.sahilj.mevadaply.Utils.MyConstants.apiInterface;
 
 
@@ -69,6 +84,7 @@ public class UserProfileFragment extends Fragment implements View.OnClickListene
     private Button btnUpdate;
     private UserDetails details;
     private Pattern pattern;
+    private String imgPath;
 
     public UserProfileFragment() {
         // Required empty public constructor
@@ -233,10 +249,18 @@ public class UserProfileFragment extends Fragment implements View.OnClickListene
     }
 
     private void galleryIntent() {
-        Intent intent = new Intent();
-        intent.setType("image/*");
-        intent.setAction(Intent.ACTION_GET_CONTENT);//
-        startActivityForResult(Intent.createChooser(intent, "Select File"),SELECT_FILE);
+        if (android.os.Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
+            Intent intent = new Intent(Intent.ACTION_OPEN_DOCUMENT);
+            intent.addCategory(Intent.CATEGORY_OPENABLE);
+            intent.setType("image/*");
+            startActivityForResult(Intent.createChooser(intent, "Select Picture"), 1);
+        } else {
+            Intent intent = new Intent();
+            intent.setType("image/*");
+            intent.setAction(Intent.ACTION_GET_CONTENT);
+            startActivityForResult(Intent.createChooser(intent, "Select Picture"), 1);
+        }
+
     }
 
     private void cameraIntent() {
@@ -248,13 +272,190 @@ public class UserProfileFragment extends Fragment implements View.OnClickListene
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
 
-        if (resultCode == Activity.RESULT_OK) {
+        if (resultCode == RESULT_OK) {
             if (requestCode == SELECT_FILE){
-                image = data.getData();
+
+                if (data != null && data.getData() != null) {
+                    boolean isImageFromGoogleDrive = false;
+                    Uri uri = data.getData();
+
+                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
+                        if (DocumentsContract.isDocumentUri(getActivity(), uri)) {
+                            if ("com.android.externalstorage.documents".equals(uri.getAuthority())) {
+                                String docId = DocumentsContract.getDocumentId(uri);
+                                String[] split = docId.split(":");
+                                String type = split[0];
+
+                                if ("primary".equalsIgnoreCase(type)) {
+                                    imgPath = Environment.getExternalStorageDirectory() + "/" + split[1];
+                                }
+                                else {
+                                    Pattern DIR_SEPORATOR = Pattern.compile("/");
+                                    Set<String> rv = new HashSet<>();
+                                    String rawExternalStorage = System.getenv("EXTERNAL_STORAGE");
+                                    String rawSecondaryStoragesStr = System.getenv("SECONDARY_STORAGE");
+                                    String rawEmulatedStorageTarget = System.getenv("EMULATED_STORAGE_TARGET");
+                                    if(TextUtils.isEmpty(rawEmulatedStorageTarget))
+                                    {
+                                        if(TextUtils.isEmpty(rawExternalStorage))
+                                        {
+                                            rv.add("/storage/sdcard0");
+                                        }
+                                        else
+                                        {
+                                            rv.add(rawExternalStorage);
+                                        }
+                                    }
+                                    else
+                                    {
+                                        String rawUserId;
+                                        if(Build.VERSION.SDK_INT < Build.VERSION_CODES.JELLY_BEAN_MR1)
+                                        {
+                                            rawUserId = "";
+                                        }
+                                        else
+                                        {
+                                            String path = Environment.getExternalStorageDirectory().getAbsolutePath();
+                                            String[] folders = DIR_SEPORATOR.split(path);
+                                            String lastFolder = folders[folders.length - 1];
+                                            boolean isDigit = false;
+                                            try
+                                            {
+                                                Integer.valueOf(lastFolder);
+                                                isDigit = true;
+                                            }
+                                            catch(NumberFormatException ignored)
+                                            {
+                                            }
+                                            rawUserId = isDigit ? lastFolder : "";
+                                        }
+                                        if(TextUtils.isEmpty(rawUserId))
+                                        {
+                                            rv.add(rawEmulatedStorageTarget);
+                                        }
+                                        else
+                                        {
+                                            rv.add(rawEmulatedStorageTarget + File.separator + rawUserId);
+                                        }
+                                    }
+                                    if(!TextUtils.isEmpty(rawSecondaryStoragesStr))
+                                    {
+                                        String[] rawSecondaryStorages = rawSecondaryStoragesStr.split(File.pathSeparator);
+                                        Collections.addAll(rv, rawSecondaryStorages);
+                                    }
+                                    String[] temp = rv.toArray(new String[rv.size()]);
+                                    for (String aTemp : temp) {
+                                        File tempf = new File(aTemp + "/" + split[1]);
+                                        if (tempf.exists()) {
+                                            imgPath = aTemp + "/" + split[1];
+                                        }
+                                    }
+                                }
+                            }
+                            else if ("com.android.providers.downloads.documents".equals(uri.getAuthority())) {
+                                String id = DocumentsContract.getDocumentId(uri);
+                                Uri contentUri = ContentUris.withAppendedId( Uri.parse("content://downloads/public_downloads"), Long.valueOf(id));
+
+                                Cursor cursor = null;
+                                String column = "_data";
+                                String[] projection = { column };
+                                try {
+                                    cursor = getActivity().getContentResolver().query(contentUri, projection, null, null,
+                                            null);
+                                    if (cursor != null && cursor.moveToFirst()) {
+                                        int column_index = cursor.getColumnIndexOrThrow(column);
+                                        imgPath = cursor.getString(column_index);
+                                    }
+                                } finally {
+                                    if (cursor != null)
+                                        cursor.close();
+                                }
+                            }
+                            else if("com.android.providers.media.documents".equals(uri.getAuthority())) {
+                                String docId = DocumentsContract.getDocumentId(uri);
+                                String[] split = docId.split(":");
+                                String type = split[0];
+
+                                Uri contentUri = null;
+                                if ("image".equals(type)) {
+                                    contentUri = MediaStore.Images.Media.EXTERNAL_CONTENT_URI;
+                                } else if ("video".equals(type)) {
+                                    contentUri = MediaStore.Video.Media.EXTERNAL_CONTENT_URI;
+                                } else if ("audio".equals(type)) {
+                                    contentUri = MediaStore.Audio.Media.EXTERNAL_CONTENT_URI;
+                                }
+
+                                String selection = "_id=?";
+                                String[] selectionArgs = new String[]{ split[1] };
+
+                                Cursor cursor = null;
+                                String column = "_data";
+                                String[] projection = { column };
+
+                                try {
+                                    cursor = getActivity().getContentResolver().query(contentUri, projection, selection, selectionArgs, null);
+                                    if (cursor != null && cursor.moveToFirst()) {
+                                        int column_index = cursor.getColumnIndexOrThrow(column);
+                                        imgPath = cursor.getString(column_index);
+                                    }
+                                } finally {
+                                    if (cursor != null)
+                                        cursor.close();
+                                }
+                            }
+                            else if("com.google.android.apps.docs.storage".equals(uri.getAuthority()))   {
+                                isImageFromGoogleDrive = true;
+                            }
+                        }
+                        else if ("content".equalsIgnoreCase(uri.getScheme())) {
+                            Cursor cursor = null;
+                            String column = "_data";
+                            String[] projection = { column };
+
+                            try {
+                                cursor = getActivity().getContentResolver().query(uri, projection, null, null, null);
+                                if (cursor != null && cursor.moveToFirst()) {
+                                    int column_index = cursor.getColumnIndexOrThrow(column);
+                                    imgPath = cursor.getString(column_index);
+                                }
+                            }
+                            finally {
+                                if (cursor != null)
+                                    cursor.close();
+                            }
+                        }
+                        else if ("file".equalsIgnoreCase(uri.getScheme())) {
+                            imgPath = uri.getPath();
+                        }
+                    }
+
+                    if(isImageFromGoogleDrive)  {
+                        try {
+                            Bitmap bitmap = BitmapFactory.decodeStream(getActivity().getContentResolver().openInputStream(uri));
+                            btnUpdate.setEnabled(false);
+                            new fileFromBitmap(bitmap, getActivity()).execute();
+                            userImage.setImageURI(uri);
+                            //userImage.setImageBitmap(bitmap);
+                        }
+                        catch (Exception e) {
+                            e.printStackTrace();
+                        }
+                    }
+                    else    {
+                        destination = new File(imgPath);
+                        BitmapFactory.Options bmOptions = new BitmapFactory.Options();
+                        Bitmap bitmap = BitmapFactory.decodeFile(destination.getAbsolutePath(),bmOptions);
+                        //userImage.setImageBitmap(bitmap);
+                        Glide.with(getActivity().getBaseContext()).load(bitmap).into(userImage);
+                    }
+
+                }
+
+                /*image = data.getData();
                 userImage.setImageURI(image);
 
                 destination = new File(MyUtilities.getPath(image,getContext()));
-
+*/
                 //onSelectFromGalleryResult(data);
             }
             else if (requestCode == REQUEST_CAMERA)
@@ -291,7 +492,7 @@ public class UserProfileFragment extends Fragment implements View.OnClickListene
     }
 
     public void updateData(View view) {
-
+        btnUpdate.setEnabled(false);
         MultipartBody.Part fileToUpload = null;
         RequestBody fname = RequestBody.create(MediaType.parse("text/plain"), etUserFirstName.getText().toString());
         RequestBody lname = RequestBody.create(MediaType.parse("text/plain"), etUserLastName.getText().toString());
@@ -303,6 +504,11 @@ public class UserProfileFragment extends Fragment implements View.OnClickListene
 
         if(destination!=null){
             Log.v(TAG,"File Created + " + destination.getName());
+            try {
+                destination = new Compressor(getContext()).compressToFile(destination);
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
             RequestBody requestBody = RequestBody.create(MediaType.parse("*/*"),destination);
             fileToUpload = MultipartBody.Part.createFormData("file",destination.getName(),requestBody);
         }
@@ -312,6 +518,7 @@ public class UserProfileFragment extends Fragment implements View.OnClickListene
         call.enqueue(new Callback<UpdateResult>() {
             @Override
             public void onResponse(Call<UpdateResult> call, Response<UpdateResult> response) {
+                btnUpdate.setEnabled(true);
                 if(response.body().isSuccess()){
                     Toast.makeText(getContext(), "Success", Toast.LENGTH_SHORT).show();
                 }
@@ -319,8 +526,67 @@ public class UserProfileFragment extends Fragment implements View.OnClickListene
 
             @Override
             public void onFailure(Call<UpdateResult> call, Throwable t) {
+                btnUpdate.setEnabled(true);
                 Log.v(TAG,"Fail "+t.getMessage(),t);
             }
         });
     }
+
+    File file;
+
+    public class fileFromBitmap extends AsyncTask<Void, Integer, String> {
+
+        Context context;
+        Bitmap bitmap;
+        String path_external = Environment.getExternalStorageDirectory() + File.separator + "temporary_file.jpg";
+
+        public fileFromBitmap(Bitmap bitmap, Context context) {
+            this.bitmap = bitmap;
+            this.context= context;
+        }
+
+        @Override
+        protected void onPreExecute() {
+            super.onPreExecute();
+            // before executing doInBackground
+            // update your UI
+            // exp; make progressbar visible
+        }
+
+        @Override
+        protected String doInBackground(Void... params) {
+
+            ByteArrayOutputStream bytes = new ByteArrayOutputStream();
+            bitmap.compress(Bitmap.CompressFormat.JPEG, 100, bytes);
+            file  = new File(context.getCacheDir(), "temporary_file.jpg");
+            try {
+                FileOutputStream fo = new FileOutputStream(file);
+                fo.write(bytes.toByteArray());
+                fo.flush();
+                fo.close();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+
+            return null;
+        }
+
+
+        @Override
+        protected void onPostExecute(String s) {
+            super.onPostExecute(s);
+            // back to main thread after finishing doInBackground
+            // update your UI or take action after
+            // exp; make progressbar gone
+
+            sendFile(file);
+
+        }
+    }
+
+    private void sendFile(File file) {
+        btnUpdate.setEnabled(true);
+        destination=file;
+    }
 }
+

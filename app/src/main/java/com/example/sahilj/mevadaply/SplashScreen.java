@@ -32,6 +32,7 @@ public class SplashScreen extends AppCompatActivity {
 
     private static final int RC_SIGN_IN = 123;
     private static final String TAG = "Splash Screen";
+    private static final int PROFILE = 01;
     private FirebaseAuth auth;
     private Intent openWelcome;
     private AlertDialog alertDialog;
@@ -131,6 +132,9 @@ public class SplashScreen extends AppCompatActivity {
             //showSnackbar(R.string.unknown_sign_in_response);
             Toast.makeText(this, "Fail", Toast.LENGTH_SHORT).show();
         }
+        if(resultCode!=RESULT_OK && requestCode==PROFILE){
+            finish();
+        }
     }
 
     //Get User Data
@@ -147,7 +151,7 @@ public class SplashScreen extends AppCompatActivity {
                     Intent intent = new Intent(getBaseContext(),ContainerActivity.class);
                     intent.putExtra(MyConstants.TIME,0);
                     intent.putExtra(MyConstants.TYPE,"profile");
-                    startActivity(intent);
+                    startActivityForResult(intent,PROFILE);
                 }
             }
 
@@ -168,11 +172,13 @@ public class SplashScreen extends AppCompatActivity {
             @Override
             public void onResponse(Call<TransResult> call, Response<TransResult> response) {
                 if(response.body().isStatus()) {
-                    openWelcome.getIntExtra(MyConstants.POINTS,MyUtilities.getPointCount(response.body().getTransDetailsList()));
-                    openWelcome.putExtra(MyConstants.TIME,1);
-                    startActivity(openWelcome);
-                    finish();
+                    openWelcome.putExtra(MyConstants.POINTS,MyUtilities.getPointCount(response.body().getTransDetailsList()));
+                }else{
+                    openWelcome.putExtra(MyConstants.POINTS,0);
                 }
+                openWelcome.putExtra(MyConstants.TIME,1);
+                startActivity(openWelcome);
+                finish();
             }
 
             @Override

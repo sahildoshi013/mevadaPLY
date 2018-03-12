@@ -50,7 +50,10 @@ public class ContainerActivity extends AppCompatActivity {
 
     @Override
     public void onBackPressed() {
-
+        if(getSupportFragmentManager().getFragments().toString().contains("UserProfileFragment")) {
+            setResult(RESULT_CANCELED);
+            finish();
+        }
         if(getSupportFragmentManager().getBackStackEntryCount() > 0){
             getSupportFragmentManager().popBackStack();
         }
