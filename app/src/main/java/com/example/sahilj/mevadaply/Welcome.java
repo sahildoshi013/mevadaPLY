@@ -7,7 +7,6 @@ import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
 import android.util.Log;
 import android.view.View;
 import android.support.design.widget.NavigationView;
@@ -16,9 +15,7 @@ import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
-import android.view.Menu;
 import android.view.MenuItem;
-import android.widget.ShareActionProvider;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -33,10 +30,9 @@ import com.firebase.ui.auth.AuthUI;
 import com.firebase.ui.auth.ErrorCodes;
 import com.firebase.ui.auth.IdpResponse;
 import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.auth.FirebaseUserMetadata;
 import com.mikhaellopez.circularimageview.CircularImageView;
 
-import java.util.Arrays;
+import java.util.Collections;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -225,7 +221,7 @@ public class Welcome extends AppCompatActivity
         startActivityForResult(
                 AuthUI.getInstance()
                         .createSignInIntentBuilder()
-                        .setAvailableProviders(Arrays.asList(
+                        .setAvailableProviders(Collections.singletonList(
                                 phoneBuilder.build()))
                         .build(),
                 RC_SIGN_IN);
@@ -244,9 +240,10 @@ public class Welcome extends AppCompatActivity
                 //finish();
 
                 SharedPreferences sharedPreferences = getSharedPreferences(MyConstants.SHAREDPRENAME,MODE_PRIVATE);
+                sharedPreferences.edit().putString(MyConstants.NEW_NUMBER,MyUtilities.getPhoneNumber()).apply();
                 String old_number = sharedPreferences.getString(MyConstants.OLD_NUMBER,null);
                 String new_phone = MyUtilities.getPhoneNumber();
-                if(old_number.compareTo(new_phone)!=0)
+                if((old_number != null ? old_number.compareTo(new_phone) : 0) !=0)
                     updateNumber(sharedPreferences.getString(MyConstants.OLD_NUMBER,null),MyUtilities.getPhoneNumber());
                 return;
             } else {
@@ -278,7 +275,7 @@ public class Welcome extends AppCompatActivity
         }
     }
 
-    private void updateNumber(String string, String phoneNumber) {
+    private void updateNumber(String string, final String phoneNumber) {
         Log.v(TAG,"Old " + string + " new "+phoneNumber);
 
         Call<InsertResult> call = MyConstants.apiInterface.updateMobileNumber(string,phoneNumber);
@@ -288,6 +285,8 @@ public class Welcome extends AppCompatActivity
             public void onResponse(Call<InsertResult> call, Response<InsertResult> response) {
                 if(response.body().isSuccess())
                 {
+                    SharedPreferences sharedPreferences = getSharedPreferences(MyConstants.SHAREDPRENAME,MODE_PRIVATE);
+                    sharedPreferences.edit().putString(MyConstants.OLD_NUMBER,phoneNumber).apply();
                     Toast.makeText(Welcome.this, "Success", Toast.LENGTH_SHORT).show();
                     alertDialog.setTitle("Success !");
                     alertDialog.setMessage("Your Mobile Number is Updated.");

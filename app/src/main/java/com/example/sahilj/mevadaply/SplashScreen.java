@@ -3,12 +3,14 @@ package com.example.sahilj.mevadaply;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Handler;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
 import android.widget.Toast;
 
+import com.example.sahilj.mevadaply.Responses.InsertResult;
 import com.example.sahilj.mevadaply.Responses.Result;
 import com.example.sahilj.mevadaply.Responses.TransResult;
 import com.example.sahilj.mevadaply.Responses.UserDetails;
@@ -50,7 +52,45 @@ public class SplashScreen extends AppCompatActivity {
             }
         });
 
-        checkLogin();
+        checkMobileNumber();
+
+    }
+
+    private void checkMobileNumber() {
+        SharedPreferences sharedPreferences = getSharedPreferences(MyConstants.SHAREDPRENAME,MODE_PRIVATE);
+        String oldNumber = sharedPreferences.getString(MyConstants.OLD_NUMBER,null);
+        String newNumber = sharedPreferences.getString(MyConstants.NEW_NUMBER,null);
+
+        if(oldNumber!=null && newNumber!=null && oldNumber.compareTo(newNumber)!=0)
+            updateNumber(oldNumber,newNumber);
+        else
+            checkLogin();
+    }
+
+    private void updateNumber(String string, final String phoneNumber) {
+        Log.v(TAG,"Old " + string + " new "+phoneNumber);
+
+        alertDialog.setTitle("Error!");
+        alertDialog.setMessage("Something went wrong!");
+
+        Call<InsertResult> call = MyConstants.apiInterface.updateMobileNumber(string,phoneNumber);
+        call.enqueue(new Callback<InsertResult>() {
+            @Override
+            public void onResponse(Call<InsertResult> call, Response<InsertResult> response) {
+                if(response.body().isSuccess())
+                {
+                    SharedPreferences sharedPreferences = getSharedPreferences(MyConstants.SHAREDPRENAME,MODE_PRIVATE);
+                    sharedPreferences.edit().putString(MyConstants.OLD_NUMBER,phoneNumber).apply();
+                    getUserData();
+                }else
+                    alertDialog.show();
+            }
+
+            @Override
+            public void onFailure(Call<InsertResult> call, Throwable t) {
+                alertDialog.show();
+            }
+        });
 
     }
 
@@ -58,6 +98,7 @@ public class SplashScreen extends AppCompatActivity {
         openWelcome=new Intent(getBaseContext(),Welcome.class);
 
         auth = FirebaseAuth.getInstance();
+
         if (auth.getCurrentUser() != null) {
             // already signed in
             getUserData();
