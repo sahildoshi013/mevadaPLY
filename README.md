@@ -1,7 +1,3 @@
-<<<<<<< HEAD
-MEVADA PLY
-This is Android application for PLY Comapany.
-=======
+
 # mevadaPLY
-This is Android APP of Mevada PLY Company.
->>>>>>> 8fc8a4af7baeb715b80519d0f07cd17cad949892
+Mevada PLY is android based reward redemption platform where  the customers of client's company can view there reward points and redeem there points. It also provides trending Designs. Tools & Technologies:  Android Studio,  Retrofit,  Firebase Phone Authentication, PHP, MySQL. Github Link :  github.com/sahildoshi013/mevadaPLY
