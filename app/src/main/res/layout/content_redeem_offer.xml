@@ -10,7 +10,9 @@
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="120dp"
+        android:background="@drawable/pattern"
+        android:padding="16dp">
         <com.mikhaellopez.circularimageview.CircularImageView
             android:id="@+id/imgOfferPic"
             android:layout_width="90dp"
@@ -33,14 +35,15 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Offer Name"
-                android:textColor="@android:color/black"
-                android:textSize="18sp"/>
+                android:textColor="@android:color/white"
+                android:textSize="18sp" />
 
             <TextView
                 android:id="@+id/tvOfferDesc"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Offer Description"
+                android:textColor="@android:color/white"
                 android:maxLines="3"/>
         </LinearLayout>
         <LinearLayout
@@ -60,13 +63,18 @@
                 android:id="@+id/tvPointNeeded"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:textColor="@android:color/darker_gray"
+                android:text="@string/Points"
                 android:gravity="center"/>
             <Button
                 android:id="@+id/btnRedeem"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_vertical"
-                android:text="Redeem" />
+                android:text="View"
+                android:textColor="@android:color/white"
+                android:layout_marginTop="4dp"
+                android:background="@drawable/roundedbutton" />
         </LinearLayout>
     </LinearLayout>
 </android.support.v7.widget.CardView>

@@ -3,6 +3,7 @@ package com.example.sahilj.mevadaply.Adapters;
 import android.app.Activity;
 import android.content.Context;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.v4.app.FragmentManager;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -17,7 +18,6 @@ import com.example.sahilj.mevadaply.Responses.DesignDetails;
 import com.example.sahilj.mevadaply.Utils.MyConstants;
 
 import java.io.Serializable;
-import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -39,31 +39,24 @@ public class MyGridViewAdapter extends ArrayAdapter<DesignDetails> {
             this.fragmentManager=fragmentManager;
         }
 
-        /**
-         * Updates grid data and refresh grid items.
-         * @param mGridData
-         */
-        public void setGridData(List<DesignDetails> mGridData) {
-            this.mGridData = mGridData;
-            notifyDataSetChanged();
-        }
-
+        @NonNull
         @Override
-        public View getView(final int position, View convertView, ViewGroup parent) {
+        public View getView(final int position, View convertView, @NonNull ViewGroup parent) {
             View row = convertView;
             ViewHolder holder;
             if (row == null) {
                 LayoutInflater inflater = ((Activity) mContext).getLayoutInflater();
                 row = inflater.inflate(layoutResourceId, parent, false);
                 holder = new ViewHolder();
-                holder.imageView = (ImageView) row.findViewById(R.id.grid_item_image);
+                holder.imageView = row.findViewById(R.id.grid_item_image);
                 row.setTag(holder);
             } else {
                 holder = (ViewHolder) row.getTag();
             }
             final DesignDetails item = mGridData.get(position);
 
-            Glide.with(mContext).load(item.getPhoto_url()).into(holder.imageView);
+            Glide.with(mContext).load(item.getPhoto_url()).into(holder.imageView).onLoadStarted(mContext.getResources().getDrawable(R.drawable.ic_placeholder));
+
             holder.imageView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {

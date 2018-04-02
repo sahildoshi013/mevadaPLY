@@ -19,9 +19,6 @@ public class ApiClient {
         return BASE_URL;
     }
 
-    //private static final String BASE_URL = "http://192.168.43.107:80/mevadaply/";
-    //public static final String BASE_URL = "http://10.0.2.2:80/mevadaply/";
-    //public static final String BASE_URL = "http://192.168.0.19:80/android/";
     private static final String BASE_URL = "http://www.swoopzi.com/mevada/";
     private static Retrofit retrofit = null;
     private static Gson gson=new GsonBuilder().setLenient().create();

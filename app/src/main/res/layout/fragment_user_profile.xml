@@ -19,7 +19,7 @@
         android:layout_height="120dp"
         android:layout_centerHorizontal="true"
         android:layout_marginTop="30dp"
-        android:src="@drawable/ic_person_black_24dp"
+        android:background="@drawable/ic_person_black_24dp"
         app:civ_border_color="#EEEEEE"
         app:civ_border_width="4dp"
         app:civ_shadow="true"
@@ -48,7 +48,10 @@
             android:hint="@string/first_name"
             android:inputType="textPersonName|textCapWords"
             android:nextFocusDown="@id/etLastName"
-            android:selectAllOnFocus="true" />
+            android:selectAllOnFocus="true"
+            android:drawablePadding="4dp"
+            android:drawableStart="@drawable/ic_person_black_24dp"
+            android:drawableLeft="@drawable/ic_person_black_24dp" />
 
         <EditText
             android:id="@+id/etLastName"
@@ -82,7 +85,10 @@
         android:hint="@string/email_id"
         android:inputType="textEmailAddress"
         android:nextFocusDown="@id/etArea"
-        android:selectAllOnFocus="true"/>
+        android:selectAllOnFocus="true"
+        android:drawablePadding="4dp"
+        android:drawableStart="@drawable/ic_email_black_24dp"
+        android:drawableLeft="@drawable/ic_email_black_24dp" />
 
     <LinearLayout
         android:id="@+id/llArea"
@@ -98,7 +104,10 @@
             android:hint="@string/area"
             android:inputType="textCapWords"
             android:selectAllOnFocus="true"
-            android:nextFocusDown="@id/etCity"/>
+            android:nextFocusDown="@id/etCity"
+            android:drawablePadding="4dp"
+            android:drawableStart="@drawable/ic_home_black_24dp"
+            android:drawableLeft="@drawable/ic_home_black_24dp" />
 
         <EditText
             android:id="@+id/etCity"
@@ -111,16 +120,28 @@
             android:selectAllOnFocus="true"/>
     </LinearLayout>
 
-    <Button
-        android:id="@+id/btnUpdate"
+    <RelativeLayout
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="@string/update"
         android:layout_below="@id/llArea"
         android:layout_centerHorizontal="true"
-        android:background="@color/colorPrimaryDark"
-        android:layout_marginTop="16dp" />
-
+        android:layout_marginTop="16dp">
+        <Button
+            android:id="@+id/btnUpdate"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/update"
+            android:background="@drawable/roundedbutton"
+            android:layout_marginTop="16dp"
+            android:textColor="@android:color/white"
+            android:layout_centerInParent="true" />
+        <ProgressBar
+            android:id="@+id/pbUpdate"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:visibility="gone"/>
+    </RelativeLayout>
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"

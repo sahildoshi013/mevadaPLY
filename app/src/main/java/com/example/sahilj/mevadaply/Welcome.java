@@ -111,8 +111,9 @@ public class Welcome extends AppCompatActivity
             String name = details.getUser_fname() + " " + details.getUser_lname();
             String area = details.get_area();
 
-            Glide.with(getApplicationContext()).load(details.getUser_pic_url()).into(drawerProfilePic);
-            Glide.with(getApplicationContext()).load(details.getUser_pic_url()).into(profilePic);
+            Glide.with(getApplicationContext()).load(details.getUser_pic_url()).into(drawerProfilePic).onLoadStarted(getResources().getDrawable(R.drawable.ic_placeholder));
+            Glide.with(getApplicationContext()).load(details.getUser_pic_url()).into(profilePic).onLoadStarted(getResources().getDrawable(R.drawable.ic_placeholder));
+
             drawerName.setText(name);
             drawerNumber.setText(details.getUser_phone());
             userName.setText(name);
@@ -184,6 +185,7 @@ public class Welcome extends AppCompatActivity
             setShareIntent();
         } else if (id == R.id.nav_logout) {
             FirebaseAuth.getInstance().signOut();
+            MyUtilities.setSum();
             Intent intent = new Intent(getBaseContext(),SplashScreen.class);
             startActivity(intent);
             finish();
@@ -362,8 +364,7 @@ public class Welcome extends AppCompatActivity
             @Override
             public void onResponse(Call<TransResult> call, Response<TransResult> response) {
                 if(response.body().isStatus()) {
-                    String points = "Total : " + MyUtilities.getPointCount(response.body().getTransDetailsList());
-                    userPoints.setText(points);
+                    userPoints.setText(String.valueOf(MyUtilities.getPointCount(response.body().getTransDetailsList())));
                 }
 
             }

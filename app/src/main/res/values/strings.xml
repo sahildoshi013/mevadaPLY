@@ -7,10 +7,9 @@
 
     <string name="action_settings">Settings</string>
     <string name="Hyphen">-</string>
-    <string name="pointDesc">Credites</string>
+    <string name="pointDesc">Points</string>
     <string name="design_trends">Design Trends</string>
     <string name="redeem">Redeem</string>
-    <string name="company_details">Mevada PLY \n +91 80 00 074479</string>
     <string name="last_name">Last Name</string>
     <string name="first_name">First Name</string>
     <string name="edit_profile_pic">Edit Profile Pic</string>
@@ -27,5 +26,7 @@
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="images">Images</string>
+    <string name="company_name">Mevada PLY</string>
+    <string name="company_details">+918735041358\nwww.mevadaply.com</string>
 
 </resources>

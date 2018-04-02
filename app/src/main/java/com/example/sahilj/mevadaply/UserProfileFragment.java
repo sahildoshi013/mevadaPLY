@@ -1,7 +1,6 @@
 package com.example.sahilj.mevadaply;
 
 
-import android.app.Activity;
 import android.content.ContentUris;
 import android.content.Context;
 import android.content.DialogInterface;
@@ -30,15 +29,14 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ProgressBar;
 import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
-import com.example.sahilj.mevadaply.Responses.Result;
 import com.example.sahilj.mevadaply.Responses.UpdateResult;
 import com.example.sahilj.mevadaply.Responses.UserDetails;
 import com.example.sahilj.mevadaply.Utils.MyConstants;
 import com.example.sahilj.mevadaply.Utils.MyUtilities;
-import com.firebase.ui.auth.data.model.User;
 import com.mikhaellopez.circularimageview.CircularImageView;
 
 import java.io.ByteArrayOutputStream;
@@ -46,9 +44,7 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
-import java.util.Calendar;
 import java.util.Collections;
-import java.util.Date;
 import java.util.HashSet;
 import java.util.Set;
 import java.util.regex.Pattern;
@@ -79,12 +75,13 @@ public class UserProfileFragment extends Fragment implements View.OnClickListene
     private EditText etArea;
     private int REQUEST_CAMERA = 0, SELECT_FILE = 1;
     private String userChoosenTask;
-    private File destination;
+    private static File destination;
     private Uri image;
     private Button btnUpdate;
     private UserDetails details;
     private Pattern pattern;
     private String imgPath;
+    private ProgressBar progressBar;
 
     public UserProfileFragment() {
         // Required empty public constructor
@@ -151,6 +148,13 @@ public class UserProfileFragment extends Fragment implements View.OnClickListene
         return view;
     }
 
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        setUserDetails();
+    }
+
     private void setUserDetails() {
         if(MyConstants.USER_DETAILS!=null) {
             details = MyConstants.USER_DETAILS;
@@ -180,6 +184,8 @@ public class UserProfileFragment extends Fragment implements View.OnClickListene
         etArea = view.findViewById(R.id.etArea);
         etCity = view.findViewById(R.id.etCity);
         btnUpdate = view.findViewById(R.id.btnUpdate);
+        progressBar = view.findViewById(R.id.pbUpdate);
+        progressBar.setVisibility(View.GONE);
     }
 
     @Override
@@ -485,12 +491,14 @@ public class UserProfileFragment extends Fragment implements View.OnClickListene
         }
 
         Glide.with(UserProfileFragment.this).load(destination).into(userImage);
-        Toast.makeText(getContext(), "Hello", Toast.LENGTH_SHORT).show();
+
         userImage.setImageBitmap(thumbnail);
     }
 
     public void updateData(View view) {
         btnUpdate.setEnabled(false);
+        btnUpdate.setVisibility(View.INVISIBLE);
+        progressBar.setVisibility(View.VISIBLE);
         MultipartBody.Part fileToUpload = null;
         RequestBody fname = RequestBody.create(MediaType.parse("text/plain"), etUserFirstName.getText().toString());
         RequestBody lname = RequestBody.create(MediaType.parse("text/plain"), etUserLastName.getText().toString());
@@ -520,25 +528,29 @@ public class UserProfileFragment extends Fragment implements View.OnClickListene
                 if(response.body().isSuccess()){
                     Toast.makeText(getContext(), "Success", Toast.LENGTH_SHORT).show();
                 }
+                btnUpdate.setVisibility(View.VISIBLE);
+                progressBar.setVisibility(View.INVISIBLE);
             }
 
             @Override
             public void onFailure(Call<UpdateResult> call, Throwable t) {
                 btnUpdate.setEnabled(true);
                 Log.v(TAG,"Fail "+t.getMessage(),t);
+                Toast.makeText(getContext(), "Fail!", Toast.LENGTH_SHORT).show();
+                btnUpdate.setVisibility(View.VISIBLE);
+                progressBar.setVisibility(View.INVISIBLE);
             }
         });
     }
 
-    File file;
+    static File file;
 
     public class fileFromBitmap extends AsyncTask<Void, Integer, String> {
 
         Context context;
         Bitmap bitmap;
-        String path_external = Environment.getExternalStorageDirectory() + File.separator + "temporary_file.jpg";
 
-        public fileFromBitmap(Bitmap bitmap, Context context) {
+        fileFromBitmap(Bitmap bitmap, Context context) {
             this.bitmap = bitmap;
             this.context= context;
         }

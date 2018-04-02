@@ -10,6 +10,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
 
 import com.example.sahilj.mevadaply.Adapters.MyHistoryAdapter;
 import com.example.sahilj.mevadaply.Adapters.MyRedeemOfferAdapter;
@@ -36,6 +37,7 @@ public class RedeemOfferFragment extends Fragment {
 
     private static final String TAG = "Redeem Fragment";
     private RecyclerView rvRedeemOffer;
+    private TextView tvPoint;
 
     public RedeemOfferFragment() {
         // Required empty public constructor
@@ -49,12 +51,23 @@ public class RedeemOfferFragment extends Fragment {
         View view = inflater.inflate(R.layout.fragment_redeem_offer, container, false);
 
         rvRedeemOffer=view.findViewById(R.id.rvRedeemOffer);
+        tvPoint = view.findViewById(R.id.tvRedeemPoint);
+
+        String point = "Points : " + MyUtilities.getSum();
+        tvPoint.setText(point);
 
         LinearLayoutManager mLayoutManager = new LinearLayoutManager(getContext());
         rvRedeemOffer.setLayoutManager(mLayoutManager);
 
         getRedeemOffer();
         return view;
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        String point = "Points : " + MyUtilities.getSum();
+        tvPoint.setText(point);
     }
 
     private void getRedeemOffer() {

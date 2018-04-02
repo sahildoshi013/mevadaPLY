@@ -1,6 +1,7 @@
 package com.example.sahilj.mevadaply.Adapters;
 
 import android.app.Activity;
+import android.content.Context;
 import android.os.Bundle;
 import android.support.v4.app.FragmentManager;
 import android.support.v7.widget.CardView;
@@ -9,10 +10,8 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 import com.example.sahilj.mevadaply.DisplayDesignFragment;
@@ -51,7 +50,7 @@ public class MyDesignTrendsAdapter extends RecyclerView.Adapter<MyDesignTrendsAd
         final DesignTrendsDetail detail = data.get(position);
         String url = detail.getUrl();
         if(!url.equals(MyConstants.NULL_URL))
-            Glide.with(activity).load(detail.getUrl()).into(holder.imgDesignImage);
+            Glide.with(activity).load(detail.getUrl()).into(holder.imgDesignImage).onLoadStarted(holder.context.getResources().getDrawable(R.drawable.ic_placeholder));
         holder.tvDesignName.setText(detail.getDesign_name());
 
         holder.cvDesignContain.setOnClickListener(new View.OnClickListener() {
@@ -78,12 +77,14 @@ public class MyDesignTrendsAdapter extends RecyclerView.Adapter<MyDesignTrendsAd
         private final TextView tvDesignName;
         private final CardView cvDesignContain;
         private final ImageView imgDesignImage;
+        private Context context;
 
         MyViewHolder(View itemView) {
             super(itemView);
             cvDesignContain = itemView.findViewById(R.id.cvDesignContain);
             tvDesignName = itemView.findViewById(R.id.tvDesignName);
             imgDesignImage = itemView.findViewById(R.id.imgDesignImage);
+            context=itemView.getContext();
         }
     }
 }

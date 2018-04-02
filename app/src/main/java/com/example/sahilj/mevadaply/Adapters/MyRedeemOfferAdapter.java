@@ -3,7 +3,6 @@ package com.example.sahilj.mevadaply.Adapters;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
-import android.support.design.widget.Snackbar;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -20,8 +19,6 @@ import com.example.sahilj.mevadaply.Responses.OfferDetail;
 import com.example.sahilj.mevadaply.Utils.MyConstants;
 import com.example.sahilj.mevadaply.Utils.MyUtilities;
 import com.mikhaellopez.circularimageview.CircularImageView;
-
-import org.w3c.dom.Text;
 
 import java.util.List;
 
@@ -40,10 +37,12 @@ public class MyRedeemOfferAdapter extends RecyclerView.Adapter<MyRedeemOfferAdap
     private final Activity activity;
     private AlertDialog deleteDialog;
     private AlertDialog alertDialog;
+    private boolean isAvailable;
 
     public MyRedeemOfferAdapter(List<OfferDetail> data, Activity activity) {
         this.data=data;
         this.activity=activity;
+        this.isAvailable = true;
     }
 
     @Override
@@ -58,7 +57,7 @@ public class MyRedeemOfferAdapter extends RecyclerView.Adapter<MyRedeemOfferAdap
         final OfferDetail detail = data.get(position);
         String url = detail.getUrl();
         if(!url.equals(MyConstants.NULL_URL))
-            Glide.with(activity).load(detail.getUrl()).into(holder.imgOfferPic);
+            Glide.with(activity).load(detail.getUrl()).into(holder.imgOfferPic).onLoadStarted(activity.getResources().getDrawable(R.drawable.ic_placeholder));
         holder.tvOfferName.setText(detail.getRedeem_offer_name());
         holder.tvOfferDesc.setText(detail.getRedeem_offer_description());
         holder.tvOfferPoint.setText(String.valueOf(detail.getRedeem_offer_points()));
@@ -68,7 +67,7 @@ public class MyRedeemOfferAdapter extends RecyclerView.Adapter<MyRedeemOfferAdap
         if(MyUtilities.getSum()-point<0) {
             String pointNeed = point-MyUtilities.getSum() + " needed";
             holder.tvPointNeeded.setText(pointNeed);
-            holder.btnRedeem.setEnabled(false);
+            isAvailable = false;
         }else{
             holder.tvPointNeeded.setVisibility(View.GONE);
         }
@@ -85,10 +84,14 @@ public class MyRedeemOfferAdapter extends RecyclerView.Adapter<MyRedeemOfferAdap
                 TextView tvDesc = deleteDialogView.findViewById(R.id.tvRoDesc);
                 TextView tvPoint = deleteDialogView.findViewById(R.id.tvRoPoints);
 
+                deleteDialogView.setBackgroundColor(activity.getResources().getColor(android.R.color.transparent));
+                deleteDialog.setCancelable(false);
+
                 tvText.setText(detail.getRedeem_offer_name());
                 tvDesc.setText(detail.getRedeem_offer_description());
                 tvPoint.setText(String.valueOf(detail.getRedeem_offer_points()));
-                Glide.with(activity).load(detail.getUrl()).into(imageView);
+                if(detail.getUrl().compareTo(MyConstants.NULL_URL)!=0)
+                    Glide.with(activity).load(detail.getUrl()).into(imageView).onLoadStarted(activity.getResources().getDrawable(R.drawable.ic_placeholder));
 
                 deleteDialogView.findViewById(R.id.btnRoCancel).setOnClickListener(new View.OnClickListener() {
                     @Override
@@ -104,6 +107,9 @@ public class MyRedeemOfferAdapter extends RecyclerView.Adapter<MyRedeemOfferAdap
                         sendRequest(detail.getRedeem_offer_id());
                     }
                 });
+
+                if(!isAvailable)
+                    deleteDialogView.findViewById(R.id.btnRoRedeem).setEnabled(false);
                 deleteDialog.show();
             }
         });
@@ -111,7 +117,6 @@ public class MyRedeemOfferAdapter extends RecyclerView.Adapter<MyRedeemOfferAdap
     }
 
     private void sendRequest(int redeem_offer_id) {
-
         alertDialog = MyConstants.alertBox(activity);
         alertDialog.setButton(DialogInterface.BUTTON_NEGATIVE, "Ok", new DialogInterface.OnClickListener() {
             @Override

@@ -17,7 +17,6 @@ import android.support.v7.app.AlertDialog;
 import android.util.Log;
 
 import com.example.sahilj.mevadaply.Responses.TransDetails;
-import com.example.sahilj.mevadaply.Welcome;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 
@@ -118,5 +117,9 @@ public class MyUtilities {
         String s=cursor.getString(column_index);
         cursor.close();
         return s;
+    }
+
+    public static void setSum() {
+        sum= 0;
     }
 }
