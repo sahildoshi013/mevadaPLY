@@ -25,6 +25,19 @@
         android:paddingBottom="2dp"
         android:background="@drawable/button_background"
         android:textColor="#ffffff"
-        android:text="Close" />
+        android:text="@string/close"
+        android:layout_alignParentEnd="true"
+        android:layout_marginEnd="15dp"
+        tools:ignore="RelativeOverlap" />
+
+    <ImageView
+        android:layout_width="70dp"
+        android:layout_height="70dp"
+        android:src="@drawable/company_logo"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentBottom="true"
+        android:layout_margin="16dp"
+        android:contentDescription="@string/company_logo" />
 
 </RelativeLayout>

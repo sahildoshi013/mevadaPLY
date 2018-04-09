@@ -4,23 +4,22 @@
     android:orientation="horizontal"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:padding="8dp"
-    app:cardCornerRadius="5dp"
-    android:elevation="8dp">
+    android:padding="16dp"
+    app:cardCornerRadius="5dp">
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="120dp"
-        android:background="@drawable/pattern"
+        android:background="@drawable/background"
         android:padding="16dp">
         <com.mikhaellopez.circularimageview.CircularImageView
             android:id="@+id/imgOfferPic"
             android:layout_width="90dp"
             android:layout_height="90dp"
-            android:src="@mipmap/ic_launcher"
+            android:src="@drawable/placeholder"
             android:layout_gravity="center_vertical"
-            app:civ_border_color="#EEEEEE"
-            app:civ_border_width="4dp"
+            app:civ_border_color="@color/colorAccent"
+            app:civ_border_width="2dp"
             app:civ_shadow="true"
             app:civ_shadow_radius="10"
             app:civ_shadow_color="#ce000000"/>
@@ -34,15 +33,14 @@
                 android:id="@+id/tvOfferName"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Offer Name"
                 android:textColor="@android:color/white"
-                android:textSize="18sp" />
+                android:textSize="18sp"
+                android:maxLines="1"/>
 
             <TextView
                 android:id="@+id/tvOfferDesc"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Offer Description"
                 android:textColor="@android:color/white"
                 android:maxLines="3"/>
         </LinearLayout>
@@ -50,7 +48,9 @@
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
             android:orientation="vertical"
-            android:gravity="center">
+            android:gravity="center"
+            android:layout_marginEnd="8dp"
+            android:layout_marginRight="8dp">
             <TextView
                 android:id="@+id/tvOfferPoints"
                 android:layout_width="match_parent"
@@ -58,12 +58,12 @@
                 android:text="@string/Points"
                 android:gravity="center"
                 android:textSize="24sp"
-                android:textColor="@android:color/holo_blue_dark"/>
+                android:textColor="@android:color/white"/>
             <TextView
                 android:id="@+id/tvPointNeeded"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:textColor="@android:color/darker_gray"
+                android:textColor="@android:color/white"
                 android:text="@string/Points"
                 android:gravity="center"/>
             <Button
@@ -71,7 +71,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_vertical"
-                android:text="View"
+                android:text="@string/btn_view"
                 android:textColor="@android:color/white"
                 android:layout_marginTop="4dp"
                 android:background="@drawable/roundedbutton" />

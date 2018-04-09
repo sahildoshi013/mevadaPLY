@@ -111,9 +111,14 @@ public class Welcome extends AppCompatActivity
             String name = details.getUser_fname() + " " + details.getUser_lname();
             String area = details.get_area();
 
-            Glide.with(getApplicationContext()).load(details.getUser_pic_url()).into(drawerProfilePic).onLoadStarted(getResources().getDrawable(R.drawable.ic_placeholder));
-            Glide.with(getApplicationContext()).load(details.getUser_pic_url()).into(profilePic).onLoadStarted(getResources().getDrawable(R.drawable.ic_placeholder));
-
+            Log.v(TAG,"url : "+details.getUser_pic_url());
+            if(!details.getUser_pic_url().equals(MyConstants.NULL_URL)) {
+                Glide.with(getApplicationContext()).load(details.getUser_pic_url()).into(drawerProfilePic);
+                Glide.with(getApplicationContext()).load(details.getUser_pic_url()).into(profilePic);
+            }else{
+                drawerProfilePic.setImageResource(R.drawable.ic_person_black_24dp);
+                profilePic.setImageResource(R.drawable.ic_person_black_24dp);
+            }
             drawerName.setText(name);
             drawerNumber.setText(details.getUser_phone());
             userName.setText(name);

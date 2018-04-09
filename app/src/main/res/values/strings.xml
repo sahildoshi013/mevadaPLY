@@ -28,5 +28,9 @@
     <string name="images">Images</string>
     <string name="company_name">Mevada PLY</string>
     <string name="company_details">+918735041358\nwww.mevadaply.com</string>
+    <string name="company_logo">Company Logo</string>
+    <string name="btn_view">View</string>
+    <string name="design_image">Design Image</string>
+    <string name="close">Close</string>
 
 </resources>

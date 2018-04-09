@@ -5,13 +5,22 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     app:layout_behavior="@string/appbar_scrolling_view_behavior"
-    tools:context=".UserProfileActivity">
+    tools:context=".ContainerActivity">
 
-    <View
+    <ImageView
         android:id="@+id/viewBackground"
         android:layout_width="match_parent"
         android:layout_height="75dp"
-        android:background="@color/colorPrimaryDark" />
+        android:adjustViewBounds="true"
+        android:scaleType="fitXY"
+        android:src="@drawable/company_logo"
+        android:contentDescription="@string/company_logo" />
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="2dp"
+        android:background="@color/colorAccent"
+        android:layout_below="@id/viewBackground"/>
 
     <com.mikhaellopez.circularimageview.CircularImageView
         android:id="@+id/imgUserProfile"
@@ -19,8 +28,8 @@
         android:layout_height="120dp"
         android:layout_centerHorizontal="true"
         android:layout_marginTop="30dp"
-        android:background="@drawable/ic_person_black_24dp"
-        app:civ_border_color="#EEEEEE"
+        android:src="@drawable/ic_person_black_24dp"
+        app:civ_border_color="@color/colorAccent"
         app:civ_border_width="4dp"
         app:civ_shadow="true"
         app:civ_shadow_color="#ce000000"

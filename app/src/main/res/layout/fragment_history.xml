@@ -8,14 +8,14 @@
     tools:context="com.example.sahilj.mevadaply.ContainerActivity">
 
     <LinearLayout
-        android:background="@android:color/darker_gray"
+        android:background="#aac7bec0"
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
         <TextView
             android:layout_width="64dp"
             android:layout_height="wrap_content"
             android:text="@string/date"
-            android:textColor="@android:color/black"
+            android:textColor="@color/colorAccent"
             android:textSize="16sp"
             android:padding="8dp"/>
 
@@ -24,7 +24,7 @@
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:text="@string/desc"
-            android:textColor="@android:color/black"
+            android:textColor="@color/colorAccent"
             android:textSize="16sp"
             android:padding="8dp"
             android:gravity="center"/>
@@ -33,7 +33,7 @@
             android:layout_width="80dp"
             android:layout_height="wrap_content"
             android:text="@string/type"
-            android:textColor="@android:color/black"
+            android:textColor="@color/colorAccent"
             android:padding="8dp"
             android:textSize="16sp"
             android:textAlignment="center"/>
@@ -42,7 +42,7 @@
             android:layout_width="64dp"
             android:layout_height="wrap_content"
             android:text="@string/Points"
-            android:textColor="@android:color/black"
+            android:textColor="@color/colorAccent"
             android:padding="8dp"
             android:textSize="16sp"/>
     </LinearLayout>

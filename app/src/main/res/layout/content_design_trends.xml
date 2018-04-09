@@ -15,8 +15,10 @@
             android:id="@+id/imgDesignImage"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:scaleType="centerCrop"
-            android:adjustViewBounds="true" />
+            android:scaleType="centerInside"
+            android:adjustViewBounds="true"
+            android:src="@drawable/company_logo"
+            android:contentDescription="@string/design_image" />
         <LinearLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"

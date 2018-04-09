@@ -18,8 +18,8 @@
     <style name="AppTheme.PopupOverlay" parent="ThemeOverlay.AppCompat.Light" />
 
     <style name="NavigationView" >
-        <item name="android:listDivider">@color/colorDarkGey</item>
-        <item name="android:textColorSecondary">@color/colorDarkGey</item>
+        <item name="android:listDivider">@color/colorAccent</item>
+        <item name="android:textColorSecondary">@color/colorAccent</item>
     </style>
 
     <style name="ButtonStyle">
