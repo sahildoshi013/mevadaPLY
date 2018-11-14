@@ -16,9 +16,9 @@ import android.os.Bundle;
 import android.os.Environment;
 import android.provider.DocumentsContract;
 import android.provider.MediaStore;
-import android.support.annotation.NonNull;
-import android.support.v4.app.Fragment;
-import android.support.v7.app.AlertDialog;
+import androidx.annotation.NonNull;
+import androidx.fragment.app.Fragment;
+import androidx.appcompat.app.AlertDialog;
 import android.text.Editable;
 import android.text.TextUtils;
 import android.text.TextWatcher;
@@ -166,7 +166,7 @@ public class UserProfileFragment extends Fragment implements View.OnClickListene
             String city = details.getUser_city();
 
             if (destination == null)
-                Glide.with(UserProfileFragment.this).load(url).into(userImage);
+                //Glide.with(UserProfileFragment.this).load(url).into(userImage);
 
             etUserFirstName.setText(fname);
             etUserLastName.setText(lname);
@@ -490,7 +490,7 @@ public class UserProfileFragment extends Fragment implements View.OnClickListene
             e.printStackTrace();
         }
 
-        Glide.with(UserProfileFragment.this).load(destination).into(userImage);
+        //Glide.with(UserProfileFragment.this).load(destination).into(userImage);
 
         userImage.setImageBitmap(thumbnail);
     }
