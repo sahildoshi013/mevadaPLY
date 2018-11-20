@@ -4,6 +4,8 @@ import com.google.gson.annotations.SerializedName;
 
 import java.io.Serializable;
 import java.sql.Timestamp;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
 
@@ -13,26 +15,32 @@ import java.util.Date;
 
 public class TransDetails implements Serializable {
 
-    @SerializedName("points_tranc")
-    private String trans_type;
+    @SerializedName("tranId")
+    private Integer tranId;
 
-    @SerializedName("points_amt")
-    private String trans_amount;
+    @SerializedName("tblMpUser")
+    private UserDetails tblMpUser;
 
-    @SerializedName("points_comments")
-    private String trans_comment;
+    @SerializedName("tranDescription")
+    private String tranDescription;
 
-    @SerializedName("points_tranc_time")
-    private String trans_time;
+    @SerializedName("tranPoint")
+    private int tranPoint;
+
+    @SerializedName("tranType")
+    private int tranType;
+
+    @SerializedName("tranTime")
+    private Date tranTime;
 
     public String getTrans_type() {
-        if(trans_type.equals("1"))
+        if(tranType == 1)
             return "Credited";
         return "Redeem";
     }
 
-    public String getTrans_amount() {
-        return trans_amount;
+    public Integer getTrans_amount() {
+        return tranPoint;
     }
 
     public String getTrans_comment() {
@@ -40,14 +48,59 @@ public class TransDetails implements Serializable {
             return trans_comment;
         else
             return trans_comment.substring(0,16) + "...";*/
-        return trans_comment;
+        return tranDescription;
     }
 
     public String getTrans_time() {
-        Calendar mydate = Calendar.getInstance();
-        mydate.setTimeInMillis(Long.parseLong(trans_time)*1000);
-        return mydate.get(Calendar.DAY_OF_MONTH)+"/"+mydate.get(Calendar.MONTH)+"/"+mydate.get(Calendar.YEAR);
+        DateFormat sdf = SimpleDateFormat.getDateInstance();
+        return sdf.format(tranTime);
     }
 
+    public Integer getTranId() {
+        return tranId;
+    }
 
+    public void setTranId(Integer tranId) {
+        this.tranId = tranId;
+    }
+
+    public UserDetails getTblMpUser() {
+        return tblMpUser;
+    }
+
+    public void setTblMpUser(UserDetails tblMpUser) {
+        this.tblMpUser = tblMpUser;
+    }
+
+    public String getTranDescription() {
+        return tranDescription;
+    }
+
+    public void setTranDescription(String tranDescription) {
+        this.tranDescription = tranDescription;
+    }
+
+    public int getTranPoint() {
+        return tranPoint;
+    }
+
+    public void setTranPoint(int tranPoint) {
+        this.tranPoint = tranPoint;
+    }
+
+    public int getTranType() {
+        return tranType;
+    }
+
+    public void setTranType(int tranType) {
+        this.tranType = tranType;
+    }
+
+    public Date getTranTime() {
+        return tranTime;
+    }
+
+    public void setTranTime(Date tranTime) {
+        this.tranTime = tranTime;
+    }
 }

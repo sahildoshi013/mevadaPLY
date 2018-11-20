@@ -1,11 +1,10 @@
 package com.example.sahilj.mevadaply;
 
 
-import android.app.Activity;
 import android.os.Bundle;
-import android.support.v4.app.Fragment;
-import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
+import androidx.fragment.app.Fragment;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -25,7 +24,6 @@ import retrofit2.Callback;
 import retrofit2.Response;
 
 import static com.example.sahilj.mevadaply.Utils.MyConstants.apiInterface;
-import static com.firebase.ui.auth.AuthUI.getApplicationContext;
 
 
 /**
@@ -64,7 +62,7 @@ public class HistoryFragment extends Fragment {
 
     private void getTransactionData() {
         Log.v(TAG,"Start Getting MyUtilities");
-        Call<TransResult> call=apiInterface.getTransactionData(MyUtilities.getPhoneNumber());
+        Call<TransResult> call=apiInterface.getTransactionData(MyConstants.USER_DETAILS.getUserId());
         call.enqueue(new Callback<TransResult>() {
             @Override
             public void onResponse(Call<TransResult> call, Response<TransResult> response) {

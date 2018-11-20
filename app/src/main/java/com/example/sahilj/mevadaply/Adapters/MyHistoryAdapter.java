@@ -1,6 +1,6 @@
 package com.example.sahilj.mevadaply.Adapters;
 
-import android.support.v7.widget.RecyclerView;
+import androidx.recyclerview.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -38,7 +38,7 @@ public class MyHistoryAdapter extends RecyclerView.Adapter<MyHistoryAdapter.MyVi
         holder.tvDate.setText(detail.getTrans_time());
         holder.tvDesc.setText(detail.getTrans_comment());
         holder.tvType.setText(detail.getTrans_type());
-        holder.tvPoints.setText(detail.getTrans_amount());
+        holder.tvPoints.setText(String.valueOf(detail.getTrans_amount()));
     }
 
     @Override

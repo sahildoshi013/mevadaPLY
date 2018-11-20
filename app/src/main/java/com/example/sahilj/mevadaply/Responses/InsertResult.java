@@ -9,9 +9,16 @@ import com.google.gson.annotations.SerializedName;
 public class InsertResult {
 
     @SerializedName("status")
-    private boolean success;
+    private boolean status;
 
-    public boolean isSuccess() {
-        return success;
+    @SerializedName("message")
+    private UserDetails data;
+
+    public boolean isStatus() {
+        return status;
+    }
+
+    public UserDetails getData() {
+        return data;
     }
 }

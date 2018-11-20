@@ -1,6 +1,7 @@
 package com.example.sahilj.mevadaply;
 
 
+import android.annotation.SuppressLint;
 import android.content.ContentUris;
 import android.content.Context;
 import android.content.DialogInterface;
@@ -33,8 +34,8 @@ import android.widget.ProgressBar;
 import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
-import com.example.sahilj.mevadaply.Responses.UpdateResult;
 import com.example.sahilj.mevadaply.Responses.UserDetails;
+import com.example.sahilj.mevadaply.Responses.UserResult;
 import com.example.sahilj.mevadaply.Utils.MyConstants;
 import com.example.sahilj.mevadaply.Utils.MyUtilities;
 import com.mikhaellopez.circularimageview.CircularImageView;
@@ -44,8 +45,10 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.text.BreakIterator;
 import java.util.Collections;
 import java.util.HashSet;
+import java.util.Objects;
 import java.util.Set;
 import java.util.regex.Pattern;
 
@@ -58,6 +61,7 @@ import retrofit2.Callback;
 import retrofit2.Response;
 
 import static android.app.Activity.RESULT_OK;
+import static android.os.Build.VERSION.SDK_INT;
 import static com.example.sahilj.mevadaply.Utils.MyConstants.apiInterface;
 
 
@@ -72,7 +76,7 @@ public class UserProfileFragment extends Fragment implements View.OnClickListene
     private EditText etUserFirstName;
     private EditText etUserLastName;
     private EditText etEmail;
-    private EditText etArea;
+    private EditText etArea1;
     private int REQUEST_CAMERA = 0, SELECT_FILE = 1;
     private String userChoosenTask;
     private static File destination;
@@ -82,6 +86,7 @@ public class UserProfileFragment extends Fragment implements View.OnClickListene
     private Pattern pattern;
     private String imgPath;
     private ProgressBar progressBar;
+    private EditText etArea2;
 
     public UserProfileFragment() {
         // Required empty public constructor
@@ -159,19 +164,21 @@ public class UserProfileFragment extends Fragment implements View.OnClickListene
         if(MyConstants.USER_DETAILS!=null) {
             details = MyConstants.USER_DETAILS;
             String url = details.getUser_pic_url();
-            String fname = details.getUser_fname();
-            String lname = details.getUser_lname();
-            String email = details.getUser_email();
-            String area = details.getUser_area();
-            String city = details.getUser_city();
+            String fname = details.getFirstName();
+            String lname = details.getLastName();
+            String email = details.getEmailId();
+            String area1 = details.getAddressLine2();
+            String area2 = details.getAddressLine2();
+            String city = details.getCity();
 
             if (destination == null)
-                //Glide.with(UserProfileFragment.this).load(url).into(userImage);
+                Glide.with(getActivity().getApplicationContext()).load(url).into(userImage);
 
             etUserFirstName.setText(fname);
             etUserLastName.setText(lname);
             etEmail.setText(email);
-            etArea.setText(area);
+            etArea1.setText(area1);
+            etArea2.setText(area2);
             etCity.setText(city);
         }
     }
@@ -181,11 +188,20 @@ public class UserProfileFragment extends Fragment implements View.OnClickListene
         etUserFirstName = view.findViewById(R.id.etFirstName);
         etUserLastName  = view.findViewById(R.id.etLastName);
         etEmail = view.findViewById(R.id.etEmail);
-        etArea = view.findViewById(R.id.etArea);
+        etArea1 = view.findViewById(R.id.etArea1);
+        etArea2 = view.findViewById(R.id.etArea2);
         etCity = view.findViewById(R.id.etCity);
         btnUpdate = view.findViewById(R.id.btnUpdate);
         progressBar = view.findViewById(R.id.pbUpdate);
         progressBar.setVisibility(View.GONE);
+
+        etUserFirstName.setText("Test");
+        etUserLastName.setText("Test");
+        etEmail.setText("sahil@gmail.com");
+        etArea1.setText("Add 1");
+        etArea2.setText("Add 2");
+        etCity.setText("Surat");
+
     }
 
     @Override
@@ -253,7 +269,7 @@ public class UserProfileFragment extends Fragment implements View.OnClickListene
     }
 
     private void galleryIntent() {
-        if (android.os.Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
+        if (SDK_INT >= Build.VERSION_CODES.KITKAT) {
             Intent intent = new Intent(Intent.ACTION_OPEN_DOCUMENT);
             intent.addCategory(Intent.CATEGORY_OPENABLE);
             intent.setType("image/*");
@@ -283,7 +299,7 @@ public class UserProfileFragment extends Fragment implements View.OnClickListene
                     boolean isImageFromGoogleDrive = false;
                     Uri uri = data.getData();
 
-                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
+                    if (SDK_INT >= Build.VERSION_CODES.KITKAT) {
                         if (DocumentsContract.isDocumentUri(getActivity(), uri)) {
                             if ("com.android.externalstorage.documents".equals(uri.getAuthority())) {
                                 String docId = DocumentsContract.getDocumentId(uri);
@@ -297,7 +313,7 @@ public class UserProfileFragment extends Fragment implements View.OnClickListene
                                     Pattern DIR_SEPORATOR = Pattern.compile("/");
                                     Set<String> rv = new HashSet<>();
                                     String rawExternalStorage = System.getenv("EXTERNAL_STORAGE");
-                                    String rawSecondaryStoragesStr = System.getenv("SECONDARY_STORAGE");
+                                    String rawSecondaryStorageStr = System.getenv("SECONDARY_STORAGE");
                                     String rawEmulatedStorageTarget = System.getenv("EMULATED_STORAGE_TARGET");
                                     if(TextUtils.isEmpty(rawEmulatedStorageTarget))
                                     {
@@ -313,26 +329,19 @@ public class UserProfileFragment extends Fragment implements View.OnClickListene
                                     else
                                     {
                                         String rawUserId;
-                                        if(Build.VERSION.SDK_INT < Build.VERSION_CODES.JELLY_BEAN_MR1)
+                                        String path = Environment.getExternalStorageDirectory().getAbsolutePath();
+                                        String[] folders = DIR_SEPORATOR.split(path);
+                                        String lastFolder = folders[folders.length - 1];
+                                        boolean isDigit = false;
+                                        try
                                         {
-                                            rawUserId = "";
+                                            Integer.valueOf(lastFolder);
+                                            isDigit = true;
                                         }
-                                        else
+                                        catch(NumberFormatException ignored)
                                         {
-                                            String path = Environment.getExternalStorageDirectory().getAbsolutePath();
-                                            String[] folders = DIR_SEPORATOR.split(path);
-                                            String lastFolder = folders[folders.length - 1];
-                                            boolean isDigit = false;
-                                            try
-                                            {
-                                                Integer.valueOf(lastFolder);
-                                                isDigit = true;
-                                            }
-                                            catch(NumberFormatException ignored)
-                                            {
-                                            }
-                                            rawUserId = isDigit ? lastFolder : "";
                                         }
+                                        rawUserId = isDigit ? lastFolder : "";
                                         if(TextUtils.isEmpty(rawUserId))
                                         {
                                             rv.add(rawEmulatedStorageTarget);
@@ -342,12 +351,12 @@ public class UserProfileFragment extends Fragment implements View.OnClickListene
                                             rv.add(rawEmulatedStorageTarget + File.separator + rawUserId);
                                         }
                                     }
-                                    if(!TextUtils.isEmpty(rawSecondaryStoragesStr))
+                                    if(!TextUtils.isEmpty(rawSecondaryStorageStr))
                                     {
-                                        String[] rawSecondaryStorages = rawSecondaryStoragesStr.split(File.pathSeparator);
-                                        Collections.addAll(rv, rawSecondaryStorages);
+                                        String[] rawSecondaryStorage = rawSecondaryStorageStr.split(File.pathSeparator);
+                                        Collections.addAll(rv, rawSecondaryStorage);
                                     }
-                                    String[] temp = rv.toArray(new String[rv.size()]);
+                                    String[] temp = rv.toArray(new String[0]);
                                     for (String aTemp : temp) {
                                         File tempf = new File(aTemp + "/" + split[1]);
                                         if (tempf.exists()) {
@@ -360,19 +369,14 @@ public class UserProfileFragment extends Fragment implements View.OnClickListene
                                 String id = DocumentsContract.getDocumentId(uri);
                                 Uri contentUri = ContentUris.withAppendedId( Uri.parse("content://downloads/public_downloads"), Long.valueOf(id));
 
-                                Cursor cursor = null;
                                 String column = "_data";
                                 String[] projection = { column };
-                                try {
-                                    cursor = getActivity().getContentResolver().query(contentUri, projection, null, null,
-                                            null);
+                                try (Cursor cursor = getActivity().getContentResolver().query(contentUri, projection, null, null,
+                                        null)) {
                                     if (cursor != null && cursor.moveToFirst()) {
                                         int column_index = cursor.getColumnIndexOrThrow(column);
                                         imgPath = cursor.getString(column_index);
                                     }
-                                } finally {
-                                    if (cursor != null)
-                                        cursor.close();
                                 }
                             }
                             else if("com.android.providers.media.documents".equals(uri.getAuthority())) {
@@ -392,19 +396,15 @@ public class UserProfileFragment extends Fragment implements View.OnClickListene
                                 String selection = "_id=?";
                                 String[] selectionArgs = new String[]{ split[1] };
 
-                                Cursor cursor = null;
                                 String column = "_data";
                                 String[] projection = { column };
 
-                                try {
-                                    cursor = getActivity().getContentResolver().query(contentUri, projection, selection, selectionArgs, null);
+                                assert contentUri != null;
+                                try (Cursor cursor = getActivity().getContentResolver().query(contentUri, projection, selection, selectionArgs, null)) {
                                     if (cursor != null && cursor.moveToFirst()) {
                                         int column_index = cursor.getColumnIndexOrThrow(column);
                                         imgPath = cursor.getString(column_index);
                                     }
-                                } finally {
-                                    if (cursor != null)
-                                        cursor.close();
                                 }
                             }
                             else if("com.google.android.apps.docs.storage".equals(uri.getAuthority()))   {
@@ -412,20 +412,14 @@ public class UserProfileFragment extends Fragment implements View.OnClickListene
                             }
                         }
                         else if ("content".equalsIgnoreCase(uri.getScheme())) {
-                            Cursor cursor = null;
                             String column = "_data";
                             String[] projection = { column };
 
-                            try {
-                                cursor = getActivity().getContentResolver().query(uri, projection, null, null, null);
+                            try (Cursor cursor = getActivity().getContentResolver().query(uri, projection, null, null, null)) {
                                 if (cursor != null && cursor.moveToFirst()) {
                                     int column_index = cursor.getColumnIndexOrThrow(column);
                                     imgPath = cursor.getString(column_index);
                                 }
-                            }
-                            finally {
-                                if (cursor != null)
-                                    cursor.close();
                             }
                         }
                         else if ("file".equalsIgnoreCase(uri.getScheme())) {
@@ -446,6 +440,7 @@ public class UserProfileFragment extends Fragment implements View.OnClickListene
                         }
                     }
                     else    {
+                        assert imgPath != null;
                         destination = new File(imgPath);
                         BitmapFactory.Options bmOptions = new BitmapFactory.Options();
                         Bitmap bitmap = BitmapFactory.decodeFile(destination.getAbsolutePath(),bmOptions);
@@ -495,23 +490,27 @@ public class UserProfileFragment extends Fragment implements View.OnClickListene
         userImage.setImageBitmap(thumbnail);
     }
 
-    public void updateData(View view) {
+    private void updateData(View view) {
         btnUpdate.setEnabled(false);
         btnUpdate.setVisibility(View.INVISIBLE);
         progressBar.setVisibility(View.VISIBLE);
+
         MultipartBody.Part fileToUpload = null;
-        RequestBody fname = RequestBody.create(MediaType.parse("text/plain"), etUserFirstName.getText().toString());
-        RequestBody lname = RequestBody.create(MediaType.parse("text/plain"), etUserLastName.getText().toString());
-        RequestBody email = RequestBody.create(MediaType.parse("text/plain"), etEmail.getText().toString());
-        RequestBody area = RequestBody.create(MediaType.parse("text/plain"), etArea.getText().toString());
-        RequestBody city = RequestBody.create(MediaType.parse("text/plain"), etCity.getText().toString());
-        RequestBody number = RequestBody.create(MediaType.parse("text/plain"), MyUtilities.getPhoneNumber());
+
+        String fname = etUserFirstName.getText().toString();
+        String lname = etUserLastName.getText().toString();
+        String email = etEmail.getText().toString();
+        String addressLine1 = etArea1.getText().toString();
+        String addressLine2 = etArea2.getText().toString();
+
+        String city = etCity.getText().toString();
+        String number = MyUtilities.getPhoneNumber();
 
 
         if(destination!=null){
             Log.v(TAG,"File Created + " + destination.getName());
             try {
-                destination = new Compressor(getContext()).compressToFile(destination);
+                destination = new Compressor(getActivity().getApplicationContext()).compressToFile(destination);
             } catch (IOException e) {
                 e.printStackTrace();
             }
@@ -519,21 +518,28 @@ public class UserProfileFragment extends Fragment implements View.OnClickListene
             fileToUpload = MultipartBody.Part.createFormData("file",destination.getName(),requestBody);
         }
 
-        Call<UpdateResult> call = apiInterface.updateUserData(fileToUpload,fname,lname,email,number,area,city);
+        Call<UserResult> call = apiInterface.updateUserData(fileToUpload,fname,lname,email,number,addressLine1,addressLine2,city);
 
-        call.enqueue(new Callback<UpdateResult>() {
+        call.enqueue(new Callback<UserResult>() {
             @Override
-            public void onResponse(Call<UpdateResult> call, Response<UpdateResult> response) {
+            public void onResponse(Call<UserResult> call, Response<UserResult> response) {
                 btnUpdate.setEnabled(true);
-                if(response.body().isSuccess()){
-                    Toast.makeText(getContext(), "Success", Toast.LENGTH_SHORT).show();
+                if(response.code()== 200) {
+                    Log.i(TAG, "onResponse1: "+ response.body());
+                    if (response.body().isStatus()) {
+                        Toast.makeText(getContext(), "Success", Toast.LENGTH_SHORT).show();
+                        MyConstants.USER_DETAILS = response.body().getDetails();
+                    }
+                }else{
+                    Log.i(TAG, "onResponse2: " + response.code());
                 }
+
                 btnUpdate.setVisibility(View.VISIBLE);
                 progressBar.setVisibility(View.INVISIBLE);
             }
 
             @Override
-            public void onFailure(Call<UpdateResult> call, Throwable t) {
+            public void onFailure(Call<UserResult> call, Throwable t) {
                 btnUpdate.setEnabled(true);
                 Log.v(TAG,"Fail "+t.getMessage(),t);
                 Toast.makeText(getContext(), "Fail!", Toast.LENGTH_SHORT).show();
@@ -545,10 +551,11 @@ public class UserProfileFragment extends Fragment implements View.OnClickListene
 
     static File file;
 
+    @SuppressLint("StaticFieldLeak")
     public class fileFromBitmap extends AsyncTask<Void, Integer, String> {
 
-        Context context;
-        Bitmap bitmap;
+        private Context context;
+        private Bitmap bitmap;
 
         fileFromBitmap(Bitmap bitmap, Context context) {
             this.bitmap = bitmap;

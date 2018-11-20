@@ -6,12 +6,12 @@ import com.google.gson.annotations.SerializedName;
  * Created by Sahil J on 2/27/2018.
  */
 
-public class Result {
+public class UserResult {
 
     @SerializedName("status")
     boolean status;
 
-    @SerializedName("data")
+    @SerializedName("message")
     UserDetails details;
 
     public boolean isStatus() {

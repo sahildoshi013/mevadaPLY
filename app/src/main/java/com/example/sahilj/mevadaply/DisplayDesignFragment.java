@@ -2,23 +2,19 @@ package com.example.sahilj.mevadaply;
 
 
 import android.os.Bundle;
-import android.support.v4.app.Fragment;
+import androidx.fragment.app.Fragment;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.GridView;
 import android.widget.ProgressBar;
-import android.widget.Toast;
 
 import com.example.sahilj.mevadaply.Adapters.MyGridViewAdapter;
 import com.example.sahilj.mevadaply.Responses.DesignDetailResult;
 import com.example.sahilj.mevadaply.Responses.DesignDetails;
-import com.example.sahilj.mevadaply.Responses.TransResult;
 import com.example.sahilj.mevadaply.Utils.MyConstants;
-import com.example.sahilj.mevadaply.Utils.MyUtilities;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import retrofit2.Call;

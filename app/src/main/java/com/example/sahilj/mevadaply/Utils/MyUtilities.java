@@ -11,9 +11,9 @@ import android.database.Cursor;
 import android.net.Uri;
 import android.os.Build;
 import android.provider.MediaStore;
-import android.support.v4.app.ActivityCompat;
-import android.support.v4.content.ContextCompat;
-import android.support.v7.app.AlertDialog;
+import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
+import androidx.appcompat.app.AlertDialog;
 import android.util.Log;
 
 import com.example.sahilj.mevadaply.Responses.TransDetails;
@@ -28,15 +28,16 @@ import java.util.List;
 
 public class MyUtilities {
 
-    private static final String TAG = "MyUtilitiies";
+    public static final String BASE_URL = "http://192.168.137.1:8080/";
+    public static final String MOBILE_BASE_URL = BASE_URL + "mobile/";
+    public static final String IMAGE_BASE_URL = BASE_URL + "images/";
+    public static final String USER_IMAGE_BASE_URL = IMAGE_BASE_URL + "users/";
+    public static final String OFFER_BASE_URL = IMAGE_BASE_URL + "offers/";
+    public static final String DESIGN_BASE_PATH = IMAGE_BASE_URL + "designs/";
+    private static final String TAG = "MyUtilities";
     private static String phoneNumber;
 
     private static Integer sum=0;
-
-
-    public static Integer getSum() {
-        return sum;
-    }
 
     public static int getPointCount(List<TransDetails> transDetails){
 
@@ -121,5 +122,10 @@ public class MyUtilities {
 
     public static void setSum() {
         sum= 0;
+    }
+
+    public static Integer getSum() {
+        int point = MyConstants.USER_DETAILS.getPointEarned() - MyConstants.USER_DETAILS.getPointRedeem();
+        return point;
     }
 }

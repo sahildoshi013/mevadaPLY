@@ -1,9 +1,11 @@
 package com.example.sahilj.mevadaply.Responses;
 
 import com.example.sahilj.mevadaply.APIs.ApiClient;
+import com.example.sahilj.mevadaply.Utils.MyUtilities;
 import com.google.gson.annotations.SerializedName;
 
 import java.io.Serializable;
+import java.util.Date;
 
 /**
  * Created by Sahil J on 3/5/2018.
@@ -11,17 +13,38 @@ import java.io.Serializable;
 
 public class DesignDetails implements Serializable {
 
-    @SerializedName("photo_id")
-    private int photo_id;
+    @SerializedName("designId")
+    private Integer designId;
 
-    @SerializedName("photo_url")
-    private String photo_url;
+    @SerializedName("tblMpFurnitureType")
+    private DesignTrendsDetail tblMpFurnitureType;
 
-    public int getPhoto_id() {
-        return photo_id;
+    @SerializedName("designImage")
+    private String designImage;
+
+    @SerializedName("designVisiblity")
+    private boolean designVisiblity;
+
+    @SerializedName("designTime")
+    private Date designTime;
+
+    public Integer getDesignId() {
+        return designId;
     }
 
-    public String getPhoto_url() {
-        return ApiClient.getBaseUrl()+photo_url;
+    public DesignTrendsDetail getTblMpFurnitureType() {
+        return tblMpFurnitureType;
+    }
+
+    public String getDesignImage() {
+        return MyUtilities.DESIGN_BASE_PATH + designImage;
+    }
+
+    public boolean isDesignVisiblity() {
+        return designVisiblity;
+    }
+
+    public Date getDesignTime() {
+        return designTime;
     }
 }

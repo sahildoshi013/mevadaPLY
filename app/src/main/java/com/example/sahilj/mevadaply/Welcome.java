@@ -5,23 +5,23 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
-import android.support.annotation.NonNull;
-import android.support.design.widget.FloatingActionButton;
+import androidx.annotation.NonNull;
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import android.util.Log;
 import android.view.View;
-import android.support.design.widget.NavigationView;
-import android.support.v4.view.GravityCompat;
-import android.support.v4.widget.DrawerLayout;
-import android.support.v7.app.ActionBarDrawerToggle;
-import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.Toolbar;
+import com.google.android.material.navigation.NavigationView;
+import androidx.core.view.GravityCompat;
+import androidx.drawerlayout.widget.DrawerLayout;
+import androidx.appcompat.app.ActionBarDrawerToggle;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
 import android.view.MenuItem;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 import com.example.sahilj.mevadaply.Responses.InsertResult;
-import com.example.sahilj.mevadaply.Responses.Result;
+import com.example.sahilj.mevadaply.Responses.UserResult;
 import com.example.sahilj.mevadaply.Responses.TransResult;
 import com.example.sahilj.mevadaply.Responses.UserDetails;
 import com.example.sahilj.mevadaply.Utils.MyConstants;
@@ -62,6 +62,7 @@ public class Welcome extends AppCompatActivity
         setContentView(R.layout.activity_welcome);
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
+
 
         FloatingActionButton fab = findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
@@ -108,7 +109,7 @@ public class Welcome extends AppCompatActivity
     private void setUserDetails() {
         if(MyConstants.USER_DETAILS!=null) {
             UserDetails details = MyConstants.USER_DETAILS;
-            String name = details.getUser_fname() + " " + details.getUser_lname();
+            String name = details.getFullName();
             String area = details.get_area();
 
             Log.v(TAG,"url : "+details.getUser_pic_url());
@@ -120,7 +121,7 @@ public class Welcome extends AppCompatActivity
                 profilePic.setImageResource(R.drawable.ic_person_black_24dp);
             }
             drawerName.setText(name);
-            drawerNumber.setText(details.getUser_phone());
+            drawerNumber.setText(details.getPhoneNo());
             userName.setText(name);
             userAddress.setText(area);
         }
@@ -290,7 +291,7 @@ public class Welcome extends AppCompatActivity
         call.enqueue(new Callback<InsertResult>() {
             @Override
             public void onResponse(Call<InsertResult> call, Response<InsertResult> response) {
-                if(response.body().isSuccess())
+                if(response.body().isStatus())
                 {
                     SharedPreferences sharedPreferences = getSharedPreferences(MyConstants.SHAREDPRENAME,MODE_PRIVATE);
                     sharedPreferences.edit().putString(MyConstants.OLD_NUMBER,phoneNumber).apply();
@@ -336,10 +337,10 @@ public class Welcome extends AppCompatActivity
     }
 
     public  void getUserData() {
-        Call<Result> call=apiInterface.getUserData(MyUtilities.getPhoneNumber());
-        call.enqueue(new Callback<Result>() {
+        Call<UserResult> call=apiInterface.getUserData(MyUtilities.getPhoneNumber());
+        call.enqueue(new Callback<UserResult>() {
             @Override
-            public void onResponse(Call<Result> call, Response<Result> response) {
+            public void onResponse(Call<UserResult> call, Response<UserResult> response) {
                 getTransactionData();
                 if(response.body().isStatus())
                 {
@@ -354,7 +355,7 @@ public class Welcome extends AppCompatActivity
             }
 
             @Override
-            public void onFailure(Call<Result> call, Throwable t) {
+            public void onFailure(Call<UserResult> call, Throwable t) {
                 Toast.makeText(Welcome.this, "No Internet!", Toast.LENGTH_SHORT).show();
             }
         });
@@ -364,14 +365,13 @@ public class Welcome extends AppCompatActivity
     //get Transaction Data
     private void getTransactionData() {
         Log.v(TAG,"Start Getting MyUtilities");
-        Call<TransResult> call=apiInterface.getTransactionData(MyUtilities.getPhoneNumber());
+        Call<TransResult> call=apiInterface.getTransactionData(MyConstants.USER_DETAILS.getUserId());
         call.enqueue(new Callback<TransResult>() {
             @Override
             public void onResponse(Call<TransResult> call, Response<TransResult> response) {
                 if(response.body().isStatus()) {
                     userPoints.setText(String.valueOf(MyUtilities.getPointCount(response.body().getTransDetailsList())));
                 }
-
             }
 
             @Override

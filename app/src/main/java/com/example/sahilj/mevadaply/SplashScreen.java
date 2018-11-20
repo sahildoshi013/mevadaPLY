@@ -4,14 +4,14 @@ import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.os.Handler;
-import android.support.v7.app.AppCompatActivity;
+
+import androidx.appcompat.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
 import android.widget.Toast;
 
 import com.example.sahilj.mevadaply.Responses.InsertResult;
-import com.example.sahilj.mevadaply.Responses.Result;
+import com.example.sahilj.mevadaply.Responses.UserResult;
 import com.example.sahilj.mevadaply.Responses.TransResult;
 import com.example.sahilj.mevadaply.Responses.UserDetails;
 import com.example.sahilj.mevadaply.Utils.MyConstants;
@@ -34,7 +34,7 @@ public class SplashScreen extends AppCompatActivity {
 
     private static final int RC_SIGN_IN = 123;
     private static final String TAG = "Splash Screen";
-    private static final int PROFILE = 01;
+    private static final int PROFILE = 1;
     private FirebaseAuth auth;
     private Intent openWelcome;
     private AlertDialog alertDialog;
@@ -77,7 +77,7 @@ public class SplashScreen extends AppCompatActivity {
         call.enqueue(new Callback<InsertResult>() {
             @Override
             public void onResponse(Call<InsertResult> call, Response<InsertResult> response) {
-                if(response.body().isSuccess())
+                if(response.body().isStatus())
                 {
                     SharedPreferences sharedPreferences = getSharedPreferences(MyConstants.SHAREDPRENAME,MODE_PRIVATE);
                     sharedPreferences.edit().putString(MyConstants.OLD_NUMBER,phoneNumber).apply();
@@ -180,10 +180,10 @@ public class SplashScreen extends AppCompatActivity {
 
     //Get User Data
     public  void getUserData() {
-        Call<Result> call=apiInterface.getUserData(MyUtilities.getPhoneNumber());
-        call.enqueue(new Callback<Result>() {
+        Call<UserResult> call=apiInterface.getUserData(MyUtilities.getPhoneNumber());
+        call.enqueue(new Callback<UserResult>() {
             @Override
-            public void onResponse(Call<Result> call, Response<Result> response) {
+            public void onResponse(Call<UserResult> call, Response<UserResult> response) {
                 if(response.body().isStatus())
                 {
                     MyConstants.USER_DETAILS = response.body().getDetails();
@@ -192,12 +192,13 @@ public class SplashScreen extends AppCompatActivity {
                     Intent intent = new Intent(getBaseContext(),ContainerActivity.class);
                     intent.putExtra(MyConstants.TIME,0);
                     intent.putExtra(MyConstants.TYPE,"profile");
-                    startActivityForResult(intent,PROFILE);
+                    startActivity(intent);
+                    finish();
                 }
             }
 
             @Override
-            public void onFailure(Call<Result> call, Throwable t) {
+            public void onFailure(Call<UserResult> call, Throwable t) {
                 Log.v(TAG,"Message : "+t.getMessage() ,t);
                 Toast.makeText(SplashScreen.this, "Fail User", Toast.LENGTH_SHORT).show();
                 alertDialog.show();
@@ -208,7 +209,7 @@ public class SplashScreen extends AppCompatActivity {
     //get Transaction Data
     private void getTransactionData(final UserDetails details) {
         Log.v(TAG,"Start Getting MyUtilities");
-        Call<TransResult> call=apiInterface.getTransactionData(MyUtilities.getPhoneNumber());
+        Call<TransResult> call=apiInterface.getTransactionData(details.getUserId());
         call.enqueue(new Callback<TransResult>() {
             @Override
             public void onResponse(Call<TransResult> call, Response<TransResult> response) {

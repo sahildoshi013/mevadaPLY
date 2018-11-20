@@ -1,14 +1,10 @@
 package com.example.sahilj.mevadaply;
 
-import android.support.v7.app.AppCompatActivity;
+import androidx.appcompat.app.AppCompatActivity;
 import android.os.Bundle;
 import android.widget.FrameLayout;
-import android.widget.Toast;
 
 import com.example.sahilj.mevadaply.Utils.MyConstants;
-import com.example.sahilj.mevadaply.Utils.MyUtilities;
-
-import java.io.Serializable;
 
 public class ContainerActivity extends AppCompatActivity {
 

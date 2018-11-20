@@ -13,7 +13,7 @@ public class DesignTrendsResult {
     @SerializedName("status")
     private boolean status;
 
-    @SerializedName("data")
+    @SerializedName("message")
     private List<DesignTrendsDetail> data;
 
     public boolean isStatus() {

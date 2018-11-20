@@ -1,7 +1,10 @@
 package com.example.sahilj.mevadaply.Responses;
 
 import com.example.sahilj.mevadaply.APIs.ApiClient;
+import com.example.sahilj.mevadaply.Utils.MyUtilities;
 import com.google.gson.annotations.SerializedName;
+
+import java.util.Date;
 
 /**
  * Created by Sahil J on 3/3/2018.
@@ -9,38 +12,52 @@ import com.google.gson.annotations.SerializedName;
 
 public class OfferDetail {
 
-    @SerializedName("redeem_offer_id")
-    private int redeem_offer_id;
+    @SerializedName("offerId")
+    private Integer offerId;
 
-    @SerializedName("redeem_offer_name")
-    private String redeem_offer_name;
+    @SerializedName("offerName")
+    private String offerName;
 
-    @SerializedName("redeem_offer_points")
-    private int redeem_offer_points;
+    @SerializedName("offerDescription")
+    private String offerDescription;
 
-    @SerializedName("redeem_offer_description")
-    private String redeem_offer_description;
+    @SerializedName("offerPoint")
+    private int offerPoint;
 
-    @SerializedName("url")
-    private String url;
+    @SerializedName("offerImage")
+    private String offerImage;
 
-    public int getRedeem_offer_id() {
-        return redeem_offer_id;
+    @SerializedName("offerCreationTime")
+    private Date offerCreationTime;
+
+    @SerializedName("offerActive")
+    private boolean offerActive;
+
+    public Integer getOfferId() {
+        return offerId;
     }
 
-    public String getRedeem_offer_name() {
-        return redeem_offer_name;
+    public String getOfferName() {
+        return offerName;
     }
 
-    public int getRedeem_offer_points() {
-        return redeem_offer_points;
+    public String getOfferDescription() {
+        return offerDescription;
     }
 
-    public String getRedeem_offer_description() {
-        return redeem_offer_description;
+    public int getOfferPoint() {
+        return offerPoint;
     }
 
-    public String getUrl() {
-        return ApiClient.getBaseUrl()+url;
+    public String getOfferImage() {
+        return MyUtilities.OFFER_BASE_URL  + offerImage;
+    }
+
+    public Date getOfferCreationTime() {
+        return offerCreationTime;
+    }
+
+    public boolean isOfferActive() {
+        return offerActive;
     }
 }

@@ -3,9 +3,9 @@ package com.example.sahilj.mevadaply.Adapters;
 import android.app.Activity;
 import android.content.Context;
 import android.os.Bundle;
-import android.support.v4.app.FragmentManager;
-import android.support.v7.widget.CardView;
-import android.support.v7.widget.RecyclerView;
+import androidx.fragment.app.FragmentManager;
+import androidx.cardview.widget.CardView;
+import androidx.recyclerview.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -48,17 +48,17 @@ public class MyDesignTrendsAdapter extends RecyclerView.Adapter<MyDesignTrendsAd
     public void onBindViewHolder(MyViewHolder holder, final int position) {
         Log.v(TAG,"Position " + position);
         final DesignTrendsDetail detail = data.get(position);
-        String url = detail.getUrl();
-        if(!url.equals(MyConstants.NULL_URL))
-            Glide.with(activity).load(detail.getUrl()).into(holder.imgDesignImage).onLoadStarted(holder.context.getResources().getDrawable(R.drawable.ic_placeholder));
-        holder.tvDesignName.setText(detail.getDesign_name());
+//        String url = detail.getUrl();
+//        if(!url.equals(MyConstants.NULL_URL))
+//            Glide.with(activity).load(detail.getUrl()).into(holder.imgDesignImage).onLoadStarted(holder.context.getResources().getDrawable(R.drawable.ic_placeholder));
+        holder.tvDesignName.setText(detail.getTypeName());
 
         holder.cvDesignContain.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 DisplayDesignFragment displayDesignFragment = new DisplayDesignFragment();
                 Bundle bundle=new Bundle();
-                bundle.putInt(MyConstants.CURRENT_SELECTED_ID,detail.getDesign_id());
+                bundle.putInt(MyConstants.CURRENT_SELECTED_ID,detail.getTypeId());
                 displayDesignFragment.setArguments(bundle);
                 fragmentManager.beginTransaction().replace(R.id.frmContainer,displayDesignFragment).addToBackStack(null).commit();
             }

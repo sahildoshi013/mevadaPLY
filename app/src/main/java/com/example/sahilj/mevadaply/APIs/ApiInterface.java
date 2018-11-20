@@ -5,7 +5,7 @@ import com.example.sahilj.mevadaply.Responses.DesignDetailResult;
 import com.example.sahilj.mevadaply.Responses.DesignTrendsResult;
 import com.example.sahilj.mevadaply.Responses.InsertResult;
 import com.example.sahilj.mevadaply.Responses.RedeemOfferResult;
-import com.example.sahilj.mevadaply.Responses.Result;
+import com.example.sahilj.mevadaply.Responses.UserResult;
 import com.example.sahilj.mevadaply.Responses.TransResult;
 import com.example.sahilj.mevadaply.Responses.UpdateResult;
 
@@ -14,9 +14,11 @@ import okhttp3.RequestBody;
 import retrofit2.Call;
 import retrofit2.http.Field;
 import retrofit2.http.FormUrlEncoded;
+import retrofit2.http.GET;
 import retrofit2.http.Multipart;
 import retrofit2.http.POST;
 import retrofit2.http.Part;
+import retrofit2.http.Path;
 
 
 /**
@@ -26,39 +28,36 @@ import retrofit2.http.Part;
 public interface ApiInterface {
 
 
-    @FormUrlEncoded
-    @POST("userData.php")
-    Call<Result> getUserData(@Field("user_id") String user);
+    @GET("users/{number}")
+    Call<UserResult> getUserData(@Path("number") String number);
 
-    @FormUrlEncoded
-    @POST("userTransaction.php")
-    Call<TransResult> getTransactionData(@Field("user_id") String user);
+    @GET("users/{userId}/transactions")
+    Call<TransResult> getTransactionData(@Path("userId") Integer userId);
 
     @Multipart
-    @POST("updateUserData.php")
-    Call<UpdateResult> updateUserData(@Part MultipartBody.Part file,
-                                      @Part("fname") RequestBody fname,
-                                      @Part("lname") RequestBody lname,
-                                      @Part("email") RequestBody email,
-                                      @Part("number") RequestBody number,
-                                      @Part("area") RequestBody area,
-                                      @Part("city") RequestBody city);
+    @POST("users")
+    Call<UserResult> updateUserData(@Part MultipartBody.Part file,
+                                      @Part("fname") String fname,
+                                      @Part("lname") String lname,
+                                      @Part("email") String email,
+                                      @Part("number") String number,
+                                      @Part("address1") String address1,
+                                      @Part("address2") String address2,
+                                      @Part("city") String city);
 
-    @POST("redeemOffers.php")
+    @GET("redeemOffers")
     Call<RedeemOfferResult> getRedeemOffers();
 
-    @POST("designTrends.php")
+    @GET("ideasType")
     Call<DesignTrendsResult> getDesignTrends();
 
-    @FormUrlEncoded
-    @POST("designDetails.php")
-    Call<DesignDetailResult> getDesignDetails(@Field("design_id") int design_id);
-
+    @GET("ideas/{id}")
+    Call<DesignDetailResult> getDesignDetails(@Path("id") int id);
 
     @FormUrlEncoded
-    @POST("insertRequest.php")
-    Call<InsertResult> redeemPoints(@Field("design_id") int design_id,
-                                    @Field("Phone_No") String phone_no);
+    @POST("redeem")
+    Call<InsertResult> redeemPoints(@Field("offerId") Integer offerId,
+                                    @Field("userId") Integer userId);
 
     @FormUrlEncoded
     @POST("updateMobileNumber.php")

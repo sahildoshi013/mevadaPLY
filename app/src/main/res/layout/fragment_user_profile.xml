@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
@@ -12,153 +12,187 @@
         android:layout_width="match_parent"
         android:layout_height="75dp"
         android:adjustViewBounds="true"
+        android:contentDescription="@string/company_logo"
         android:scaleType="fitXY"
-        android:src="@drawable/company_logo"
-        android:contentDescription="@string/company_logo" />
+        android:src="@android:color/transparent" />
 
     <View
+        android:id="@+id/view"
         android:layout_width="match_parent"
         android:layout_height="2dp"
+        android:layout_below="@id/viewBackground"
+        android:layout_marginTop="32dp"
         android:background="@color/colorAccent"
-        android:layout_below="@id/viewBackground"/>
+        app:layout_constraintBottom_toBottomOf="@+id/viewBackground"
+        app:layout_constraintTop_toBottomOf="@+id/viewBackground" />
 
     <com.mikhaellopez.circularimageview.CircularImageView
         android:id="@+id/imgUserProfile"
         android:layout_width="120dp"
         android:layout_height="120dp"
         android:layout_centerHorizontal="true"
-        android:layout_marginTop="30dp"
+        android:layout_marginStart="32dp"
+        android:layout_marginLeft="32dp"
+        android:layout_marginTop="32dp"
         android:src="@drawable/ic_person_black_24dp"
         app:civ_border_color="@color/colorAccent"
         app:civ_border_width="4dp"
         app:civ_shadow="true"
         app:civ_shadow_color="#ce000000"
-        app:civ_shadow_radius="10" />
+        app:civ_shadow_radius="10"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 
     <TextView
         android:id="@+id/tvProPic"
-        android:layout_below="@id/imgUserProfile"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="@string/edit_profile_pic"
+        android:layout_below="@id/imgUserProfile"
         android:layout_centerHorizontal="true"
-        android:textSize="12sp" />
-    <LinearLayout
-        android:id="@+id/llName"
-        android:layout_below="@id/tvProPic"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_marginTop="8dp"
+        android:text="@string/edit_profile_pic"
+        android:textSize="12sp"
+        app:layout_constraintEnd_toEndOf="@+id/imgUserProfile"
+        app:layout_constraintStart_toStartOf="@+id/imgUserProfile"
+        app:layout_constraintTop_toBottomOf="@+id/imgUserProfile" />
 
-        <EditText
-            android:id="@+id/etFirstName"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:hint="@string/first_name"
-            android:inputType="textPersonName|textCapWords"
-            android:nextFocusDown="@id/etLastName"
-            android:selectAllOnFocus="true"
-            android:drawablePadding="4dp"
-            android:drawableStart="@drawable/ic_person_black_24dp"
-            android:drawableLeft="@drawable/ic_person_black_24dp" />
-
-        <EditText
-            android:id="@+id/etLastName"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:hint="@string/last_name"
-            android:inputType="textPersonName|textCapWords"
-            android:nextFocusDown="@id/etEmail"
-            android:selectAllOnFocus="true"/>
-
-    </LinearLayout>
-
-    <!--<EditText
-        android:id="@+id/etMobileNumber"
-        android:layout_below="@id/llName"
-        android:layout_width="match_parent"
+    <EditText
+        android:id="@+id/etFirstName"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:hint="@string/mobile_number"
-        android:inputType="phone"
-        android:focusable="false"
-        android:clickable="false"
-        android:onClick="changeNumber"
-        android:textColor="@android:color/black"/>-->
+        android:layout_marginStart="16dp"
+        android:layout_marginLeft="16dp"
+        android:layout_marginTop="16dp"
+        android:drawableStart="@drawable/ic_person_black_24dp"
+        android:drawableLeft="@drawable/ic_person_black_24dp"
+        android:drawablePadding="4dp"
+        android:hint="@string/first_name"
+        android:inputType="textPersonName|textCapWords"
+        android:nextFocusDown="@id/etLastName"
+        android:selectAllOnFocus="true"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/tvProPic"/>
+
+    <EditText
+        android:id="@+id/etLastName"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:layout_marginLeft="16dp"
+        android:layout_marginEnd="16dp"
+        android:layout_marginRight="16dp"
+        android:hint="@string/last_name"
+        android:inputType="textPersonName|textCapWords"
+        android:nextFocusDown="@id/etEmail"
+        android:selectAllOnFocus="true"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/etFirstName"
+        app:layout_constraintTop_toTopOf="@+id/etFirstName" />
 
     <EditText
         android:id="@+id/etEmail"
-        android:layout_below="@id/llName"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:layout_marginLeft="16dp"
+        android:layout_marginTop="16dp"
+        android:layout_marginEnd="16dp"
+        android:layout_marginRight="16dp"
+        android:drawableStart="@drawable/ic_email_black_24dp"
+        android:drawableLeft="@drawable/ic_email_black_24dp"
+        android:drawablePadding="4dp"
         android:hint="@string/email_id"
         android:inputType="textEmailAddress"
-        android:nextFocusDown="@id/etArea"
+        android:nextFocusDown="@id/etArea1"
         android:selectAllOnFocus="true"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/etLastName" />
+
+    <EditText
+        android:id="@+id/etArea1"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:layout_marginLeft="16dp"
+        android:layout_marginTop="16dp"
+        android:layout_marginEnd="16dp"
+        android:layout_marginRight="16dp"
+        android:layout_weight="1"
+        android:drawableStart="@drawable/ic_home_black_24dp"
+        android:drawableLeft="@drawable/ic_home_black_24dp"
         android:drawablePadding="4dp"
-        android:drawableStart="@drawable/ic_email_black_24dp"
-        android:drawableLeft="@drawable/ic_email_black_24dp" />
+        android:hint="@string/address_line_1"
+        android:inputType="textCapWords"
+        android:nextFocusDown="@id/etArea2"
+        android:selectAllOnFocus="true"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/etEmail" />
 
-    <LinearLayout
-        android:id="@+id/llArea"
-        android:layout_below="@id/etEmail"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+    <EditText
+        android:id="@+id/etArea2"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:layout_marginLeft="16dp"
+        android:layout_marginTop="16dp"
+        android:layout_marginEnd="16dp"
+        android:layout_marginRight="16dp"
+        android:layout_weight="1"
+        android:drawableStart="@drawable/ic_home_black_24dp"
+        android:drawableLeft="@drawable/ic_home_black_24dp"
+        android:drawablePadding="4dp"
+        android:hint="@string/address_line_2"
+        android:inputType="textCapWords"
+        android:nextFocusDown="@id/etCity"
+        android:selectAllOnFocus="true"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/etArea1" />
 
-        <EditText
-            android:id="@+id/etArea"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:hint="@string/area"
-            android:inputType="textCapWords"
-            android:selectAllOnFocus="true"
-            android:nextFocusDown="@id/etCity"
-            android:drawablePadding="4dp"
-            android:drawableStart="@drawable/ic_home_black_24dp"
-            android:drawableLeft="@drawable/ic_home_black_24dp" />
+    <EditText
+        android:id="@+id/etCity"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:layout_marginLeft="16dp"
+        android:layout_marginTop="16dp"
+        android:layout_marginEnd="16dp"
+        android:layout_marginRight="16dp"
+        android:layout_weight="1"
+        android:hint="@string/city"
+        android:inputType="textCapWords"
+        android:nextFocusDown="@id/btnUpdate"
+        android:selectAllOnFocus="true"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/etArea2"
+        android:drawableStart="@drawable/ic_location_city_black_24dp"
+        android:drawableLeft="@drawable/ic_location_city_black_24dp" />
 
-        <EditText
-            android:id="@+id/etCity"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:hint="@string/city"
-            android:inputType="textCapWords"
-            android:nextFocusDown="@id/btnUpdate"
-            android:selectAllOnFocus="true"/>
-    </LinearLayout>
-
-    <RelativeLayout
+    <Button
+        android:id="@+id/btnUpdate"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_below="@id/llArea"
-        android:layout_centerHorizontal="true"
-        android:layout_marginTop="16dp">
-        <Button
-            android:id="@+id/btnUpdate"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/update"
-            android:background="@drawable/roundedbutton"
-            android:layout_marginTop="16dp"
-            android:textColor="@android:color/white"
-            android:layout_centerInParent="true" />
-        <ProgressBar
-            android:id="@+id/pbUpdate"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_centerInParent="true"
-            android:visibility="gone"/>
-    </RelativeLayout>
-    <TextView
+        android:layout_centerInParent="true"
+        android:layout_marginTop="16dp"
+        android:background="@drawable/roundedbutton"
+        android:text="@string/update"
+        android:textColor="@android:color/white"
+        app:layout_constraintEnd_toEndOf="@+id/etCity"
+        app:layout_constraintStart_toStartOf="@+id/etCity"
+        app:layout_constraintTop_toBottomOf="@+id/etCity" />
+
+    <ProgressBar
+        android:id="@+id/pbUpdate"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true"
-        android:layout_centerHorizontal="true"
-        android:layout_gravity="bottom"
-        android:drawableTop="@drawable/ic_account_balance_black_24dp"
-        android:gravity="center"
-        android:text="@string/company_details" />
+        android:layout_centerInParent="true"
+        android:visibility="gone"
+        app:layout_constraintBottom_toBottomOf="@+id/btnUpdate"
+        app:layout_constraintEnd_toEndOf="@+id/btnUpdate"
+        app:layout_constraintStart_toStartOf="@+id/btnUpdate"
+        app:layout_constraintTop_toTopOf="@+id/btnUpdate" />
 
-</RelativeLayout>
+</androidx.constraintlayout.widget.ConstraintLayout>

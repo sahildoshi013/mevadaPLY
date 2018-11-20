@@ -11,24 +11,17 @@ import java.io.Serializable;
 
 public class DesignTrendsDetail implements Serializable {
 
-    @SerializedName("design_id")
-    private int design_id;
+    @SerializedName("typeId")
+    private Integer typeId;
 
-    @SerializedName("design_name")
-    private String design_name;
+    @SerializedName("typeName")
+    private String typeName;
 
-    @SerializedName("url")
-    private String url;
-
-    public int getDesign_id() {
-        return design_id;
+    public Integer getTypeId() {
+        return typeId;
     }
 
-    public String getDesign_name() {
-        return design_name;
-    }
-
-    public String getUrl() {
-        return ApiClient.getBaseUrl()+url;
+    public String getTypeName() {
+        return typeName;
     }
 }

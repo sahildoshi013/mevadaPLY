@@ -13,7 +13,7 @@ public class RedeemOfferResult {
     @SerializedName("status")
     private boolean status;
 
-    @SerializedName("data")
+    @SerializedName("message")
     private List<OfferDetail> data;
 
     public boolean isStatus() {

@@ -13,7 +13,7 @@ public class TransResult {
     @SerializedName("status")
     private boolean status;
 
-    @SerializedName("data")
+    @SerializedName("message")
     private List<TransDetails> transDetailsList;
 
     public boolean isStatus() {

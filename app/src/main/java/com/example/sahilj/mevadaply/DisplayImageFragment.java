@@ -2,8 +2,8 @@ package com.example.sahilj.mevadaply;
 
 
 import android.os.Bundle;
-import android.support.v4.app.Fragment;
-import android.support.v4.view.ViewPager;
+import androidx.fragment.app.Fragment;
+import androidx.viewpager.widget.ViewPager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -40,6 +40,7 @@ public class DisplayImageFragment extends Fragment {
 
         Bundle bundle = getArguments();
         position = bundle.getInt(MyConstants.CURRENT_SELECTED_ID);
+
         data = (List<DesignDetails>) bundle.getSerializable(MyConstants.DATA);
 
         mPager = view.findViewById(R.id.pager);

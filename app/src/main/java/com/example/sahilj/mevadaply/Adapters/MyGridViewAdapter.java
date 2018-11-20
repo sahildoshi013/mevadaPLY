@@ -3,8 +3,8 @@ package com.example.sahilj.mevadaply.Adapters;
 import android.app.Activity;
 import android.content.Context;
 import android.os.Bundle;
-import android.support.annotation.NonNull;
-import android.support.v4.app.FragmentManager;
+import androidx.annotation.NonNull;
+import androidx.fragment.app.FragmentManager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -55,7 +55,7 @@ public class MyGridViewAdapter extends ArrayAdapter<DesignDetails> {
             }
             final DesignDetails item = mGridData.get(position);
 
-            Glide.with(mContext).load(item.getPhoto_url()).into(holder.imageView).onLoadStarted(mContext.getResources().getDrawable(R.drawable.ic_placeholder));
+            Glide.with(mContext).load(item.getDesignImage()).into(holder.imageView).onLoadStarted(mContext.getResources().getDrawable(R.drawable.ic_placeholder));
 
             holder.imageView.setOnClickListener(new View.OnClickListener() {
                 @Override

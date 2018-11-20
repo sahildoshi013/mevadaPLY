@@ -1,5 +1,6 @@
 package com.example.sahilj.mevadaply.APIs;
 
+import com.example.sahilj.mevadaply.Utils.MyUtilities;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 
@@ -19,7 +20,7 @@ public class ApiClient {
         return BASE_URL;
     }
 
-    private static final String BASE_URL = "http://www.swoopzi.com/mevada/";
+    private static final String BASE_URL = MyUtilities.MOBILE_BASE_URL;
     private static Retrofit retrofit = null;
     private static Gson gson=new GsonBuilder().setLenient().create();
     private static final OkHttpClient okHttpClient = new OkHttpClient().newBuilder()

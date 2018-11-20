@@ -1,23 +1,19 @@
 package com.example.sahilj.mevadaply;
 
 
-import android.app.Activity;
 import android.os.Bundle;
-import android.support.v4.app.Fragment;
-import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
+import androidx.fragment.app.Fragment;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
-import com.example.sahilj.mevadaply.Adapters.MyHistoryAdapter;
 import com.example.sahilj.mevadaply.Adapters.MyRedeemOfferAdapter;
 import com.example.sahilj.mevadaply.Responses.OfferDetail;
 import com.example.sahilj.mevadaply.Responses.RedeemOfferResult;
-import com.example.sahilj.mevadaply.Responses.TransResult;
-import com.example.sahilj.mevadaply.Utils.MyConstants;
 import com.example.sahilj.mevadaply.Utils.MyUtilities;
 
 import java.util.List;

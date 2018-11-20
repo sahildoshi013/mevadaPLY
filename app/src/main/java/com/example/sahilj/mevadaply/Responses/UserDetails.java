@@ -6,10 +6,11 @@ import android.util.Log;
 
 import com.example.sahilj.mevadaply.APIs.ApiClient;
 import com.example.sahilj.mevadaply.Utils.MyConstants;
+import com.example.sahilj.mevadaply.Utils.MyUtilities;
 import com.google.gson.annotations.SerializedName;
 
 import java.io.Serializable;
-import java.sql.Date;
+import java.util.Date;
 import java.sql.Timestamp;
 
 import static android.content.Context.MODE_PRIVATE;
@@ -20,103 +21,195 @@ import static android.content.Context.MODE_PRIVATE;
 
 public class UserDetails implements Serializable {
 
-    @SerializedName("user_id")
-    private int user_id;
+    @SerializedName("userId")
+    private Integer userId;
 
-    @SerializedName("user_fname")
-    private String user_fname;
+    @SerializedName("firstName")
+    private String firstName;
 
-    @SerializedName("user_lname")
-    private String user_lname;
+    @SerializedName("lastName")
+    private String lastName;
 
-    @SerializedName("user_phone")
-    private String user_phone;
+    @SerializedName("emailId")
+    private String emailId;
 
-    @SerializedName("user_area")
-    private String user_area;
+    @SerializedName("phoneNo")
+    private String phoneNo;
 
-    @SerializedName("user_city")
-    private String user_city;
+    @SerializedName("addressLine1")
+    private String addressLine1;
 
-    @SerializedName("user_email")
-    private String user_email;
+    @SerializedName("addressLine2")
+    private String addressLine2;
 
-    @SerializedName("user_pic_url")
-    private String user_pic_url;
+    @SerializedName("city")
+    private String city;
 
-    @SerializedName("user_create_time")
-    private String user_create_time;
+    @SerializedName("profilePic")
+    private String profilePic;
 
+    @SerializedName("password")
+    private String password;
 
+    @SerializedName("userVerified")
+    private boolean userVerified;
 
-    public String getUser_fname() {
-        return user_fname;
-    }
+    @SerializedName("userType")
+    private int userType;
 
+    @SerializedName("pointEarned")
+    private int pointEarned;
 
-    public String getUser_lname() {
-        return user_lname;
-    }
+    @SerializedName("pointRedeem")
+    private int pointRedeem;
 
+    @SerializedName("timeOfCreation")
+    private Date timeOfCreation;
 
-    public String getUser_phone() {
-        return user_phone;
-    }
-
-
-    public String getUser_area() {
-        return user_area;
-    }
+    @SerializedName("timeOfUpdation")
+    private Date timeOfUpdation;
 
     public String get_area(){
-        String area = "";
-        area += user_area;
-        if(!user_area.isEmpty() && !user_city.isEmpty())
-            area+=", ";
-        area += user_city;
-
-        return area;
+        StringBuilder sb = new StringBuilder(addressLine1);
+        sb.append(" ");
+        sb.append(addressLine2);
+        sb.append((city!=null) ? ", "+city : "");
+        return sb.toString();
     }
-
-    public String getUser_city() {
-        return user_city;
-    }
-
-    public String getUser_email() {
-        return user_email;
-    }
-
 
     public String getUser_pic_url() {
-        return ApiClient.getBaseUrl()+user_pic_url;
+        return MyUtilities.USER_IMAGE_BASE_URL + profilePic;
     }
 
-    public void setUser_fname(String user_fname) {
-        this.user_fname = user_fname;
+    public Integer getUserId() {
+        return userId;
     }
 
-    public void setUser_lname(String user_lname) {
-        this.user_lname = user_lname;
+    public void setUserId(Integer userId) {
+        this.userId = userId;
     }
 
-    public void setUser_phone(String user_phone) {
-        this.user_phone = user_phone;
+    public String getFirstName() {
+        return firstName;
     }
 
-    public void setUser_area(String user_area) {
-        this.user_area = user_area;
+    public void setFirstName(String firstName) {
+        this.firstName = firstName;
     }
 
-    public void setUser_city(String user_city) {
-        this.user_city = user_city;
+    public String getLastName() {
+        return lastName;
     }
 
-    public void setUser_email(String user_email) {
-        this.user_email = user_email;
+    public void setLastName(String lastName) {
+        this.lastName = lastName;
     }
 
-    public void setUser_pic_url(String user_pic_url) {
-        this.user_pic_url = user_pic_url;
+    public String getEmailId() {
+        return emailId;
     }
 
+    public void setEmailId(String emailId) {
+        this.emailId = emailId;
+    }
+
+    public String getPhoneNo() {
+        return phoneNo;
+    }
+
+    public void setPhoneNo(String phoneNo) {
+        this.phoneNo = phoneNo;
+    }
+
+    public String getAddressLine1() {
+        return addressLine1;
+    }
+
+    public void setAddressLine1(String addressLine1) {
+        this.addressLine1 = addressLine1;
+    }
+
+    public String getAddressLine2() {
+        return addressLine2;
+    }
+
+    public void setAddressLine2(String addressLine2) {
+        this.addressLine2 = addressLine2;
+    }
+
+    public String getCity() {
+        return city;
+    }
+
+    public void setCity(String city) {
+        this.city = city;
+    }
+
+    public String getProfilePic() {
+        return profilePic;
+    }
+
+    public void setProfilePic(String profilePic) {
+        this.profilePic = profilePic;
+    }
+
+    public String getPassword() {
+        return password;
+    }
+
+    public void setPassword(String password) {
+        this.password = password;
+    }
+
+    public boolean isUserVerified() {
+        return userVerified;
+    }
+
+    public void setUserVerified(boolean userVerified) {
+        this.userVerified = userVerified;
+    }
+
+    public int getUserType() {
+        return userType;
+    }
+
+    public void setUserType(int userType) {
+        this.userType = userType;
+    }
+
+    public int getPointEarned() {
+        return pointEarned;
+    }
+
+    public void setPointEarned(int pointEarned) {
+        this.pointEarned = pointEarned;
+    }
+
+    public int getPointRedeem() {
+        return pointRedeem;
+    }
+
+    public void setPointRedeem(int pointRedeem) {
+        this.pointRedeem = pointRedeem;
+    }
+
+    public Date getTimeOfCreation() {
+        return timeOfCreation;
+    }
+
+    public void setTimeOfCreation(Date timeOfCreation) {
+        this.timeOfCreation = timeOfCreation;
+    }
+
+    public Date getTimeOfUpdation() {
+        return timeOfUpdation;
+    }
+
+    public void setTimeOfUpdation(Date timeOfUpdation) {
+        this.timeOfUpdation = timeOfUpdation;
+    }
+
+    public String getFullName() {
+        return firstName + " " + lastName;
+    }
 }

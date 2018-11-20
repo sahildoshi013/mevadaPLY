@@ -2,8 +2,8 @@ package com.example.sahilj.mevadaply.Adapters;
 
 import android.app.Activity;
 import android.content.Context;
-import android.support.annotation.NonNull;
-import android.support.v4.view.PagerAdapter;
+import androidx.annotation.NonNull;
+import androidx.viewpager.widget.PagerAdapter;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -53,7 +53,7 @@ public class MyImageViewPagerAdapter extends PagerAdapter{
                 false);
         imgDisplay = viewLayout.findViewById(R.id.imgDisplay);
 
-        Glide.with(_activity).load(_imagePaths.get(position).getPhoto_url()).into(imgDisplay).onLoadStarted(_activity.getResources().getDrawable(R.drawable.ic_placeholder));
+        Glide.with(_activity).load(_imagePaths.get(position).getDesignImage()).into(imgDisplay).onLoadStarted(_activity.getResources().getDrawable(R.drawable.ic_placeholder));
 
         container.addView(viewLayout);
 
