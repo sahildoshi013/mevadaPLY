@@ -6,9 +6,15 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     app:cardCornerRadius="8dp">
 
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:background="@drawable/cardview_broder"
+        android:padding="5dp"
+        android:layout_height="wrap_content">
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:background="@android:color/white"
         android:padding="16dp">
 
         <com.mikhaellopez.circularimageview.CircularImageView
@@ -31,6 +37,7 @@
             android:minLines="2"
             android:textColor="@color/colorAccent"
             android:textSize="20sp"
+            android:text="awfawgagagagawg"
             android:gravity="center_vertical"
             android:padding="20dp"/>
 
@@ -39,6 +46,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_below="@id/roImg"
+            android:text="afawfagagagagagawawawgawgawgagawgawgawg"
             android:textColor="@android:color/black"/>
 
         <TextView
@@ -47,6 +55,7 @@
             android:layout_height="wrap_content"
             android:text="@string/Points"
             android:layout_below="@id/tvRoDesc"
+            android:padding="12sp"
             android:textColor="@color/colorAccent"/>
         <TextView
             android:id="@+id/tvRoPoints"
@@ -57,6 +66,7 @@
             android:layout_toEndOf="@id/tvRoPointInfo"
             android:textSize="20sp"
             android:background="@android:color/transparent"
+            android:text="1212"
             android:layout_toRightOf="@id/tvRoPointInfo"
             android:padding="8sp" />
         <Button
@@ -83,4 +93,5 @@
             android:textColor="@android:color/white"
             android:layout_margin="4dp"/>
     </RelativeLayout>
+    </FrameLayout>
 </androidx.cardview.widget.CardView>

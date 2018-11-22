@@ -194,14 +194,6 @@ public class UserProfileFragment extends Fragment implements View.OnClickListene
         btnUpdate = view.findViewById(R.id.btnUpdate);
         progressBar = view.findViewById(R.id.pbUpdate);
         progressBar.setVisibility(View.GONE);
-
-        etUserFirstName.setText("Test");
-        etUserLastName.setText("Test");
-        etEmail.setText("sahil@gmail.com");
-        etArea1.setText("Add 1");
-        etArea2.setText("Add 2");
-        etCity.setText("Surat");
-
     }
 
     @Override

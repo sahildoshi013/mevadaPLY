@@ -36,7 +36,7 @@
         <activity
             android:name=".ContainerActivity"
             android:parentActivityName=".Welcome"
-            android:theme="@style/AppTheme" />
+            android:theme="@style/ActionBarAppTheme" />
     </application>
 
 </manifest>

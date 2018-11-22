@@ -29,6 +29,7 @@ import java.util.List;
 public class MyUtilities {
 
     public static final String BASE_URL = "http://192.168.137.1:8080/";
+    //public static final String BASE_URL = "http://192.168.43.107:8080/";
     public static final String MOBILE_BASE_URL = BASE_URL + "mobile/";
     public static final String IMAGE_BASE_URL = BASE_URL + "images/";
     public static final String USER_IMAGE_BASE_URL = IMAGE_BASE_URL + "users/";

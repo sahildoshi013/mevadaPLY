@@ -7,45 +7,6 @@
     android:orientation="vertical"
     tools:context="com.example.sahilj.mevadaply.ContainerActivity">
 
-    <LinearLayout
-        android:background="#aac7bec0"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content">
-        <TextView
-            android:layout_width="64dp"
-            android:layout_height="wrap_content"
-            android:text="@string/date"
-            android:textColor="@color/colorAccent"
-            android:textSize="16sp"
-            android:padding="8dp"/>
-
-        <TextView
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:text="@string/desc"
-            android:textColor="@color/colorAccent"
-            android:textSize="16sp"
-            android:padding="8dp"
-            android:gravity="center"/>
-
-        <TextView
-            android:layout_width="80dp"
-            android:layout_height="wrap_content"
-            android:text="@string/type"
-            android:textColor="@color/colorAccent"
-            android:padding="8dp"
-            android:textSize="16sp"
-            android:textAlignment="center"/>
-
-        <TextView
-            android:layout_width="64dp"
-            android:layout_height="wrap_content"
-            android:text="@string/Points"
-            android:textColor="@color/colorAccent"
-            android:padding="8dp"
-            android:textSize="16sp"/>
-    </LinearLayout>
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/rvHistoryView"
         android:layout_width="match_parent"

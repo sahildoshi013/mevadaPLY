@@ -4,11 +4,14 @@ import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import androidx.recyclerview.widget.RecyclerView;
+
+import android.graphics.Color;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -61,7 +64,8 @@ public class MyRedeemOfferAdapter extends RecyclerView.Adapter<MyRedeemOfferAdap
         holder.tvOfferName.setText(detail.getOfferName());
         holder.tvOfferDesc.setText(detail.getOfferDescription());
         holder.tvOfferPoint.setText(String.valueOf(detail.getOfferPoint()));
-
+        holder.simpleProgressBar.setMax(detail.getOfferPoint());
+        holder.simpleProgressBar.setProgress(MyUtilities.getSum());
         int point = detail.getOfferPoint();
 
         if(MyUtilities.getSum()-point<0) {
@@ -73,7 +77,7 @@ public class MyRedeemOfferAdapter extends RecyclerView.Adapter<MyRedeemOfferAdap
             holder.tvPointNeeded.setVisibility(View.GONE);
         }
 
-        holder.btnRedeem.setOnClickListener(new View.OnClickListener() {
+        holder.itemVieww.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 Log.i(TAG, "onClick: btnredeem clicked");
@@ -85,6 +89,7 @@ public class MyRedeemOfferAdapter extends RecyclerView.Adapter<MyRedeemOfferAdap
                 CircularImageView imageView = deleteDialogView.findViewById(R.id.roImg);
                 TextView tvDesc = deleteDialogView.findViewById(R.id.tvRoDesc);
                 TextView tvPoint = deleteDialogView.findViewById(R.id.tvRoPoints);
+
 
                 deleteDialogView.setBackgroundColor(activity.getResources().getColor(android.R.color.transparent));
                 deleteDialog.setCancelable(false);
@@ -177,6 +182,8 @@ public class MyRedeemOfferAdapter extends RecyclerView.Adapter<MyRedeemOfferAdap
         private final TextView tvOfferPoint;
         private final Button btnRedeem;
         private final TextView tvPointNeeded;
+        private final View itemVieww;
+        private final ProgressBar simpleProgressBar;
 
         MyViewHolder(View itemView) {
             super(itemView);
@@ -186,6 +193,8 @@ public class MyRedeemOfferAdapter extends RecyclerView.Adapter<MyRedeemOfferAdap
             tvOfferPoint = itemView.findViewById(R.id.tvOfferPoints);
             tvPointNeeded = itemView.findViewById(R.id.tvPointNeeded);
             btnRedeem = itemView.findViewById(R.id.btnRedeem);
+            itemVieww=itemView;
+            simpleProgressBar = itemView.findViewById(R.id.simpleProgressBar);
         }
     }
 }

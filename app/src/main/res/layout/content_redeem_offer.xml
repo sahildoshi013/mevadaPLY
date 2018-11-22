@@ -11,7 +11,7 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="120dp"
-        android:background="@drawable/background"
+        android:background="@drawable/cardlayoutshape"
         android:padding="16dp">
 
         <com.mikhaellopez.circularimageview.CircularImageView
@@ -38,7 +38,7 @@
                 android:id="@+id/tvOfferName"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:textColor="@android:color/white"
+                android:textColor="@android:color/black"
                 android:textSize="18sp"
                 android:maxLines="1"/>
 
@@ -46,7 +46,7 @@
                 android:id="@+id/tvOfferDesc"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:textColor="@android:color/white"
+                android:textColor="@android:color/black"
                 android:maxLines="3"/>
         </LinearLayout>
         <LinearLayout
@@ -63,12 +63,12 @@
                 android:text="@string/Points"
                 android:gravity="center"
                 android:textSize="24sp"
-                android:textColor="@android:color/white"/>
+                android:textColor="@android:color/black"/>
             <TextView
                 android:id="@+id/tvPointNeeded"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:textColor="@android:color/white"
+                android:textColor="@android:color/black"
                 android:text="@string/Points"
                 android:gravity="center"/>
             <Button
@@ -78,8 +78,26 @@
                 android:layout_gravity="center_vertical"
                 android:text="@string/btn_view"
                 android:textColor="@android:color/white"
+                android:elevation="3dp"
                 android:layout_marginTop="4dp"
+                android:visibility="gone"
                 android:background="@drawable/roundedbutton" />
+
         </LinearLayout>
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/ic_redeem_arrow_right_black_24dp"
+            android:layout_gravity="center_vertical"
+            android:visibility="visible"
+            />
+
     </LinearLayout>
+    <ProgressBar
+        android:id="@+id/simpleProgressBar"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:max="100"
+        style="@style/MyProgressBar"
+        android:progress="50"/>
 </androidx.cardview.widget.CardView>
